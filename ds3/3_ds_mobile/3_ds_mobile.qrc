@@ -1,0 +1,79 @@
+<RCC>
+	<qresource prefix="/">
+		<file alias="logo.ico">resource/logo.ico</file>
+		<file alias="logo_title.svg">resource/logo_title.svg</file>
+		<file alias="logo_title_home.svg">resource/logo_title_home.svg</file>
+	</qresource>
+	
+	<qresource prefix="/font">
+		<file alias="awesome.ttf">resource/font/FontAwesome.otf</file>
+	</qresource>
+	
+	<qresource prefix="/qml">
+		<file alias="Main.qml">resource/qml/Main.qml</file>
+		<file alias="Splash.qml">resource/qml/Splash.qml</file>
+		<file alias="Wizard.qml">resource/qml/Wizard.qml</file>
+
+		<file alias="About.qml">resource/qml/About.qml</file>
+		<file alias="Chat.qml">resource/qml/Chat.qml</file>
+		<file alias="Debug.qml">resource/qml/Debug.qml</file>
+		<file alias="Group.qml">resource/qml/Group.qml</file>
+		<file alias="Message.qml">resource/qml/Message.qml</file>
+		<file alias="Settings.qml">resource/qml/Settings.qml</file>
+		
+		<file alias="ColorPicker.qml">resource/qml/ColorPicker.qml</file>
+		<file alias="ClientSettings.qml">resource/qml/ClientSettings.qml</file>
+		<file alias="SecuritySettings.qml">resource/qml/SecuritySettings.qml</file>
+		<file alias="SessionSettings.qml">resource/qml/SessionSettings.qml</file>
+	</qresource>
+  <qresource prefix="/qml/controls">
+	<file alias="CustomSlider.qml">resource/qml/controls/CustomSlider.qml</file>
+  <file alias="CustomSwipeView.qml">resource/qml/controls/CustomSwipeView.qml</file>
+
+  </qresource>
+	<qresource prefix="/qml/setting">
+	  <file alias="ClientList.qml">resource/qml/setting/ClientList.qml</file>
+	  <file alias="SystemSettings.qml">resource/qml/setting/SystemSettings.qml</file>
+	</qresource>
+
+	<qresource prefix="/qml/delegate">
+		<file alias="ChatDelegate.qml">resource/qml/delegate/ChatDelegate.qml</file>
+		<file alias="ClientDelegate.qml">resource/qml/delegate/ClientDelegate.qml</file>
+		<file alias="DebugDelegate.qml">resource/qml/delegate/DebugDelegate.qml</file>
+		<file alias="EnvelopeDelegate.qml">resource/qml/delegate/EnvelopeDelegate.qml</file>
+		<file alias="GroupDelegate.qml">resource/qml/delegate/GroupDelegate.qml</file>
+		<file alias="MessageDelegate.qml">resource/qml/delegate/MessageDelegate.qml</file>
+		<file alias="SettingDelegate.qml">resource/qml/delegate/SettingDelegate.qml</file>
+		<file alias="SystemSettingDelegate.qml">resource/qml/delegate/SystemSettingDelegate.qml</file>
+	</qresource>
+	
+	<qresource prefix="/qml/header">
+		<file alias="BackHeader.qml">resource/qml/header/BackHeader.qml</file>
+		<file alias="ChatHeader.qml">resource/qml/header/ChatHeader.qml</file>
+		<file alias="ChatListHeader.qml">resource/qml/header/ChatListHeader.qml</file>
+		<file alias="DebugHeader.qml">resource/qml/header/DebugHeader.qml</file>
+		<file alias="DebugListHeader.qml">resource/qml/header/DebugListHeader.qml</file>		
+		<file alias="Header.qml">resource/qml/header/Header.qml</file>
+		<file alias="GroupHeader.qml">resource/qml/header/GroupHeader.qml</file>
+		<file alias="GroupListHeader.qml">resource/qml/header/GroupListHeader.qml</file>
+		<file alias="MessageHeader.qml">resource/qml/header/MessageHeader.qml</file>
+		<file alias="SettingsHeader.qml">resource/qml/header/SettingsHeader.qml</file>
+		<file alias="SettingsItemHeader.qml">resource/qml/header/SettingsItemHeader.qml</file>
+	</qresource>
+	 
+	<qresource prefix="/qml/menu">
+		<file alias="ChatMenu.qml">resource/qml/menu/ChatMenu.qml</file>
+    <file alias="ClipboardMenu.qml">resource/qml/menu/ClipboardMenu.qml</file>
+		<file alias="DebugMenu.qml">resource/qml/menu/DebugMenu.qml</file>
+		<file alias="EnvelopeMenu.qml">resource/qml/menu/EnvelopeMenu.qml</file>
+		<file alias="GroupMenu.qml">resource/qml/menu/GroupMenu.qml</file>
+		<file alias="MessageMenu.qml">resource/qml/menu/MessageMenu.qml</file>
+		<file alias="MotdMenu.qml">resource/qml/menu/MotdMenu.qml</file>
+	</qresource>
+	
+	<qresource prefix="/qml/colorpicker">
+		<file alias="Wheel.qml">resource/qml/colorpicker/Wheel.qml</file>
+		<file alias="ColorUtils.js">resource/qml/colorpicker/ColorUtils.js</file>
+		<file alias="mathUtils.js">resource/qml/colorpicker/mathUtils.js</file>
+	</qresource>
+</RCC>

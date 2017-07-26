@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="color" name="custom_color">
+	<color name="black">#000000</color>
+	</item>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+	<item name ="android:windowBackground">@color/custom_color</item>
+    </style>
+</resources>

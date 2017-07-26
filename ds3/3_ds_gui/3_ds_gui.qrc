@@ -1,0 +1,18 @@
+<RCC>
+	<qresource prefix="/">
+		<file alias="logo.ico">resource/logo.ico</file>
+		<file alias="logo.png">resource/logo.png</file>
+		<file alias="logo_gray.png">resource/logo_gray.png</file>
+		<file alias="logo_orange.png">resource/logo_orange.png</file>
+		<file alias="logo_rgb.png">resource/logo_rgb.png</file>
+		<file alias="demonsaw.css">resource/demonsaw.css</file>
+		<file alias="title.png">resource/title.png</file>
+		<file alias="font_awesome.ttf">resource/font/fontawesome-4.5.0.ttf</file>
+	</qresource>
+	<qresource prefix="/tree">
+		<file alias="close.png">resource/tree/close.png</file>
+		<file alias="open.png">resource/tree/open.png</file>
+		<file alias="sort_up.png">resource/tree/sort_up.png</file>
+		<file alias="sort_down.png">resource/tree/sort_down.png</file>
+	</qresource>
+</RCC>
