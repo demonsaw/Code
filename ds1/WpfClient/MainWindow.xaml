@@ -1,0 +1,824 @@
+﻿<Window MinWidth="800" MinHeight="600"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Class="DemonSaw.MainWindow"		
+		xmlns:ds="clr-namespace:DemonSaw"
+		xmlns:ui="clr-namespace:DemonSaw.Wpf"
+		xmlns:tree='clr-namespace:DemonSaw.Wpf.TreeList;assembly=DemonSawLibrary'
+		Title="DemonSaw Client" Height="768" Width="1024" WindowStartupLocation="CenterScreen" Icon="Resources/Saw/green.ico" Initialized="Window_Initialized" Loaded="Window_Loaded" Closed="Window_Closed">
+
+	<!-- Commands -->
+	<Window.CommandBindings>
+		<CommandBinding Command="ui:WpfCommand.Exit" Executed="ExitCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.About" Executed="AboutCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.ClientAdd" Executed="ClientAddCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.ClientRemove" Executed="ClientRemoveCommand_Executed" CanExecute="ClientDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.ClientEdit" Executed="ClientEditCommand_Executed" CanExecute="ClientDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.ClientUpdate" Executed="ClientUpdateCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.RouterEdit" Executed="RouterEditCommand_Executed" CanExecute="ClientDefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.FileAdd" Executed="FileAddCommand_Executed" CanExecute="ClientDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.FileRemove" Executed="FileRemoveCommand_Executed" CanExecute="FileRemoveCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.FileOpen" Executed="FileOpenCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.Search" Executed="SearchCommand_Executed" CanExecute="SearchCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.SearchDownload" Executed="SearchDownloadCommand_Executed" CanExecute="SearchDownloadCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.SearchRemove" Executed="SearchRemoveCommand_Executed" CanExecute="SearchRemoveCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.SearchClear" Executed="SearchClearCommand_Executed" CanExecute="SearchClearCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.BrowseDownload" Executed="BrowseDownloadCommand_Executed" CanExecute="BrowseDownloadCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.BrowseClear" Executed="BrowseClearCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.DownloadRemove" Executed="DownloadRemoveCommand_Executed" CanExecute="DownloadRemoveCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadClear" Executed="DownloadClearCommand_Executed" CanExecute="DownloadClearCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadOpen" Executed="DownloadOpenCommand_Executed" CanExecute="DownloadOpenCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadPause" Executed="DownloadPauseCommand_Executed" CanExecute="DownloadPauseCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadResume" Executed="DownloadResumeCommand_Executed" CanExecute="DownloadResumeCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadCancel" Executed="DownloadCancelCommand_Executed" CanExecute="DownloadCancelCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.DownloadRestart" Executed="DownloadRestartCommand_Executed" CanExecute="DownloadRestartCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.UploadRemove" Executed="UploadRemoveCommand_Executed" CanExecute="UploadDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.UploadClear" Executed="UploadClearCommand_Executed" CanExecute="UploadClearCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.UploadOpen" Executed="UploadOpenCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.UploadPause" Executed="UploadPauseCommand_Executed" CanExecute="UploadPauseCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.UploadResume" Executed="UploadResumeCommand_Executed" CanExecute="UploadResumeCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.UploadCancel" Executed="UploadCancelCommand_Executed" CanExecute="UploadCancelCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.LogUpdate" Executed="LogRefreshCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.LogClear" Executed="LogClearCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+	</Window.CommandBindings>
+
+	<!-- Window -->
+	<DockPanel>
+		<Menu DockPanel.Dock="Top" Name="MainMenu">
+			<Menu.ItemsPanel>
+				<ItemsPanelTemplate>
+					<DockPanel HorizontalAlignment="Stretch"/>
+				</ItemsPanelTemplate>
+			</Menu.ItemsPanel>
+			<MenuItem Header="_File">
+				<MenuItem Header="_Exit" Command="ui:WpfCommand.Exit">
+					<MenuItem.Icon>
+						<Image Source="Resources/16/exit.png"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<MenuItem Header="_Help">
+				<MenuItem Header="_About" Command="ui:WpfCommand.About">
+					<MenuItem.Icon>
+						<Image Source="Resources/Saw/white.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<ds:RadioButtonMenu x:Name="ClientMenu" Header="None" HorizontalAlignment="Right"/>
+		</Menu>
+		<TabControl SelectionChanged="TabControl_SelectionChanged">
+			<TabItem Name="ShareTab" Header="Share" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="192" MinHeight="64"/>
+						<RowDefinition Height="4" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>					
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.ClientAdd" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/user_add.png"/>
+							<Button.ToolTip>
+								<ToolTip>Add User</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.ClientEdit" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/user_edit.png"/>
+							<Button.ToolTip>
+								<ToolTip>Edit User</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.ClientRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/user_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Remove User</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.RouterEdit" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/computer_edit.png"/>
+							<Button.ToolTip>
+								<ToolTip>Edit Router</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.ClientUpdate" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/refresh.png"/>
+							<Button.ToolTip>
+								<ToolTip>Refresh</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="ClientListViewTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Users" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2,0,2,2"/>
+					<DataGrid Name="ClientListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single" MouseLeftButtonUp="ClientListView_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUpSelect" KeyUp="ClientListView_KeyUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add User" Command="ui:WpfCommand.ClientAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/user_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Edit User" Command="ui:WpfCommand.ClientEdit">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/user_edit.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Remove User" Command="ui:WpfCommand.ClientRemove">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/user_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>								
+								<Separator/>
+								<MenuItem Header="Edit Router" Command="ui:WpfCommand.RouterEdit">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/computer_edit.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Add Folder" Command="ui:WpfCommand.FileAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/folder_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Refresh" Command="ui:WpfCommand.ClientUpdate">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Client.Enabled">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<CheckBox IsChecked="{Binding Client.Enabled}" Checked="ClientListView_Enabled_CheckedChanged" Unchecked="ClientListView_Enabled_CheckedChanged"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Machine.Status">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/Status/none.png" Width="14" Height="14" Opacity="0.75"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Machine.Status, Converter={StaticResource StatusImageConverter}}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Machine.Status}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="128" Binding="{Binding Client.Name}"/>
+							<DataGridTextColumn Header="Entities" Width="64" Binding="{Binding Server.Entities}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Sessions" Width="64" Binding="{Binding Server.Sessions}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Clients" Width="64" Binding="{Binding Server.Clients}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Groups" Width="64" Binding="{Binding Server.Groups}" IsReadOnly="true"/>
+							<DataGridTemplateColumn Header="Image" Width="128" MinWidth="128" SortMemberPath="Group.Name">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal" Margin="0,0,4,0">
+											<Button Width="Auto" Height="Auto" Margin="4,0,4,0" Click="ClientListView_GroupImageButton_Click" IsTabStop="False">
+												<Image Width="14" Height="14" Source="Resources/16/page_explore.png"/>
+												<Button.ToolTip>
+													<ToolTip>Set Image</ToolTip>
+												</Button.ToolTip>
+											</Button>
+											<TextBlock VerticalAlignment="Center" Text="{Binding Group.Name}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Header="Download Path" Width="376" SortMemberPath="Client.Download">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal" Margin="0,0,4,0">
+											<Button Width="Auto" Height="Auto" Margin="4,0,4,0" Click="ClientListView_DownloadPathButton_Click" IsTabStop="False">
+												<Image Width="14" Height="14" Source="Resources/16/folder_explore.png"/>
+												<Button.ToolTip>
+													<ToolTip>Set Download Path</ToolTip>
+												</Button.ToolTip>
+											</Button>
+											<TextBlock VerticalAlignment="Center" Text="{Binding Client.Download}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>							
+						</DataGrid.Columns>
+					</DataGrid>
+					<Image Name="GroupImage" Grid.Row="1" Grid.Column="1" Width="96" Height="96" Opacity="0.35" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4"/>
+					<GridSplitter Grid.Row="2" Grid.ColumnSpan="2"/>					
+					<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.FileAdd" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/drive_add.png"/>
+							<Button.ToolTip>
+								<ToolTip>Add Share</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.FileRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/drive_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Remove Share(s)</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="FileTreeViewTextBlock" Grid.Row="3" Grid.Column="1" Text="0 Files" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2,0,2,2"/>
+					<tree:TreeList x:Name="FileTreeView" Grid.Row="4" Grid.ColumnSpan="3" MouseDoubleClick="FileTreeView_MouseDoubleClick" MouseLeftButtonUp="TreeList_MouseLeftButtonUp" MouseRightButtonUp="TreeList_MouseRightButtonUp">
+						<tree:TreeList.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add Share" Command="ui:WpfCommand.FileAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/drive_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Remove Share(s)" Command="ui:WpfCommand.FileRemove">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.Tag.Drive"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/drive_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Open File(s)" Command="ui:WpfCommand.FileOpen">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/open_file.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</tree:TreeList.ContextMenu>
+						<tree:TreeList.View>
+							<GridView>
+								<GridView.Columns>
+									<GridViewColumn Width="576" Header=" Name" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<tree:RowExpander/>
+													<Image Source="{Binding Image}" Margin="0,0,4,0">
+														<Image.ToolTip>
+															<ToolTip Content="{Binding Extension}"/>
+														</Image.ToolTip>
+													</Image>
+													<TextBlock Text="{Binding Name}"></TextBlock>
+												</StackPanel>
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>
+									</GridViewColumn>
+									<GridViewColumn Header=" Extension" Width="80" DisplayMemberBinding="{Binding Extension}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+									<GridViewColumn Header=" Size" Width="80" DisplayMemberBinding="{Binding Size, Converter={StaticResource SizeStringConverter}}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+									<GridViewColumn Header=" Type" Width="192" DisplayMemberBinding="{Binding Description}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+								</GridView.Columns>
+							</GridView>
+						</tree:TreeList.View>
+					</tree:TreeList>
+				</Grid>
+			</TabItem>
+			<TabItem Name="SearchTab" Header="Search" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30"/>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0" Grid.Column="0" Text="Keywords" VerticalAlignment="Bottom" Margin="2"/>
+					<TextBox Name="SearchKeyword" Grid.Row="1" Grid.Column="0" Width="256" Height="22" Margin="0,0,5,0" KeyDown="SearchTextBox_KeyDown"/>
+					<TextBlock Grid.Row="0" Grid.Column="1" Text="Type" VerticalAlignment="Bottom" Margin="2"/>
+					<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="2,0,2,0">
+						<ComboBox Name="SearchFilter" Width="96" Height="22" Margin="0,0,5,0">
+							<ComboBoxItem IsSelected="True">Any</ComboBoxItem>
+							<ComboBoxItem>Audio</ComboBoxItem>
+							<ComboBoxItem>Image</ComboBoxItem>
+							<ComboBoxItem>Video</ComboBoxItem>
+						</ComboBox>
+						<Button Grid.Row="1" Grid.Column="2" Name="SearchButton" Command="ui:WpfCommand.Search" Width="Auto" Height="22">
+							<Button.ContentTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<Image Source="Resources/16/search.png" Margin="2,0,2,0"/>
+										<TextBlock Margin="4,0,4,0">Search</TextBlock>
+									</StackPanel>
+								</DataTemplate>
+							</Button.ContentTemplate>
+							<Button.ToolTip>
+								<ToolTip>Search</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>					
+					<StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.SearchRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/page_white_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear File(s)</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.SearchClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear All Files</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="SearchListViewTextBlock" Grid.Row="2" Grid.Column="3" Text="0 Files" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<DataGrid Name="SearchListView" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" MouseDoubleClick="SearchListView_MouseDoubleClick" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Download File(s)" Command="ui:WpfCommand.SearchDownload">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/download.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear File(s)" Command="ui:WpfCommand.SearchRemove">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/page_white_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear All Files" Command="ui:WpfCommand.SearchClear">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Extension">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/16/bullet_page_white.png" Width="16" Height="16"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Image}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Extension}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="560" Binding="{Binding Name}"/>
+							<DataGridTextColumn Header="Extension" Width="80" Binding="{Binding Extension}"/>
+							<DataGridTextColumn Header="Size" Width="80" Binding="{Binding Size, Converter={StaticResource SizeStringConverter}}"/>
+							<DataGridTextColumn Header="Type" Width="192" Binding="{Binding Description}"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+			<TabItem Name="BrowseTab" Header="Browse" Style="{StaticResource DemonTab}" HorizontalAlignment="Right">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>					
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.BrowseClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/refresh.png"/>
+							<Button.ToolTip>
+								<ToolTip>Refresh</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="BrowseTreeViewTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Users" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<tree:TreeList x:Name="BrowseTreeView" Grid.Row="1" Grid.ColumnSpan="2" MouseDoubleClick="BrowseTreeView_MouseDoubleClick" MouseLeftButtonUp="TreeList_MouseLeftButtonUp" MouseRightButtonUp="TreeList_MouseRightButtonUp">
+						<tree:TreeList.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Download File(s)" Command="ui:WpfCommand.BrowseDownload">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.Tag.CanDownload"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/download.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Refresh" Command="ui:WpfCommand.BrowseClear">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</tree:TreeList.ContextMenu>
+						<tree:TreeList.View>
+							<GridView>
+								<GridView.Columns>
+									<GridViewColumn Width="576" Header=" Name" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}">
+										<GridViewColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<tree:RowExpander/>
+													<Image Source="{Binding Image}" Margin="0,0,4,0">
+														<Image.ToolTip>
+															<ToolTip Content="{Binding Extension}"/>
+														</Image.ToolTip>
+													</Image>
+													<TextBlock Text="{Binding Name}"></TextBlock>
+												</StackPanel>
+											</DataTemplate>
+										</GridViewColumn.CellTemplate>
+									</GridViewColumn>
+									<GridViewColumn Header=" Extension" Width="80" DisplayMemberBinding="{Binding Extension}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+									<GridViewColumn Header=" Size" Width="80" DisplayMemberBinding="{Binding Size, Converter={StaticResource SizeStringConverter}}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+									<GridViewColumn Header=" Type" Width="192" DisplayMemberBinding="{Binding Description}" HeaderContainerStyle="{StaticResource ColumnHeaderLeft}"/>
+								</GridView.Columns>
+							</GridView>
+						</tree:TreeList.View>
+					</tree:TreeList>
+				</Grid>
+			</TabItem>
+			<TabItem Name="DownloadTab" Header="Download" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>					
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.UploadRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/page_white_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear Inactive File(s)</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.UploadClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear All Inactive Files</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>				
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.DownloadRemove" IsTabStop="False">
+							<Image Source="Resources/16/page_white_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear Inactive File(s)</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.DownloadClear" IsTabStop="False">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear All Inactive Files</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="DownloadListViewTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Downloads" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<DataGrid Name="DownloadListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="true" MouseDoubleClick="DownloadListView_MouseDoubleClick" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Open File(s)" Command="ui:WpfCommand.DownloadOpen">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanOpen"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/open_file.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear Inactive File(s)" Command="ui:WpfCommand.DownloadRemove">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.Inactive"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/page_white_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear All Inactive Files" Command="ui:WpfCommand.DownloadClear">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Pause File(s)" Command="ui:WpfCommand.DownloadPause">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanPause"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_pause_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Resume File(s)" Command="ui:WpfCommand.DownloadResume">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanResume"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_play_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Cancel File(s)" Command="ui:WpfCommand.DownloadCancel">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanCancel"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_stop_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Restart File(s)" Command="ui:WpfCommand.DownloadRestart">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanRestart"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_repeat_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Machine.Status">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/Status/none.png" Width="14" Height="14" Opacity="0.75"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Machine.Status, Converter={StaticResource StatusImageConverter}}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Machine.Status}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Width="24" SortMemberPath="File.Extension">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/16/bullet_page_white.png" Width="16" Height="16"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding File.Image}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding File.Extension}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="512" Binding="{Binding File.Name}"/>
+							<DataGridTextColumn Header="Size" Width="80" Binding="{Binding File.Size, Converter={StaticResource SizeStringConverter}}"/>
+							<DataGridTextColumn Header="Speed" Width="80" Binding="{Binding Transfer.Speed, Converter={StaticResource BytesToSpeedStringConverter}}"/>
+							<DataGridTemplateColumn Header="Time" Width="80" SortMemberPath="Remaining">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Margin="2,0,2,0">
+											<TextBlock.Text>
+												<MultiBinding StringFormat="{}{0:D2}:{1:D2}:{2:D2}">
+													<Binding Path="Transfer.Remaining.Hours"/>
+													<Binding Path="Transfer.Remaining.Minutes"/>
+													<Binding Path="Transfer.Remaining.Seconds"/>
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Header="Progress" Width="88" SortMemberPath="Transfer.Progress">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Grid>
+											<ProgressBar Height="20" Minimum="0" Maximum="100" Value="{Binding Transfer.Progress, Mode=OneWay}" Margin="2,0,2,0"/>
+											<TextBlock Text="{Binding Transfer.Progress, Mode=OneWay, StringFormat={}{0:0.0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										</Grid>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+			<TabItem Name="UploadTab" Header="Upload" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.UploadRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/page_white_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear Inactive File(s)</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.UploadClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear All Inactive Files</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="UploadListViewTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Uploads" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<DataGrid Name="UploadListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="true" MouseDoubleClick="UploadListView_MouseDoubleClick" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Open File(s)" Command="ui:WpfCommand.UploadOpen">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanOpen"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/open_file.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear Inactive File(s)" Command="ui:WpfCommand.UploadRemove">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.Inactive"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/page_white_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Clear All Inactive Files" Command="ui:WpfCommand.UploadClear">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Pause File(s)" Command="ui:WpfCommand.UploadPause">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanPause"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_pause_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Resume File(s)" Command="ui:WpfCommand.UploadResume">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanResume"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_play_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Cancel File(s)" Command="ui:WpfCommand.UploadCancel">
+									<MenuItem.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBoolToVisibilityConverter}">
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem" Converter="{StaticResource NullToBoolConverter}"/>
+											<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=ContextMenu}" Path="PlacementTarget.SelectedItem.CanCancel"/>
+										</MultiBinding>
+									</MenuItem.Visibility>
+									<MenuItem.Icon>
+										<Image Source="Resources/16/control_stop_blue.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Machine.Status">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/Status/none.png" Width="14" Height="14" Opacity="0.75"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Machine.Status, Converter={StaticResource StatusImageConverter}}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Machine.Status}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Width="24" SortMemberPath="File.Extension">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/16/bullet_page_white.png" Width="16" Height="16"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding File.Image}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding File.Extension}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="512" Binding="{Binding File.Name}"/>
+							<DataGridTextColumn Header="Size" Width="80" Binding="{Binding File.Size, Converter={StaticResource SizeStringConverter}}"/>
+							<DataGridTextColumn Header="Speed" Width="80" Binding="{Binding Transfer.Speed, Converter={StaticResource BytesToSpeedStringConverter}}"/>
+							<DataGridTemplateColumn Header="Remaining" Width="80" SortMemberPath="Transfer.Remaining">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Margin="2,0,2,0">
+											<TextBlock.Text>
+												<MultiBinding StringFormat="{}{0:D2}:{1:D2}:{2:D2}">
+													<Binding Path="Transfer.Remaining.Hours"/>
+													<Binding Path="Transfer.Remaining.Minutes"/>
+													<Binding Path="Transfer.Remaining.Seconds"/>
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Header="Progress" Width="88" SortMemberPath="Transfer.Progress">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Grid>
+											<ProgressBar Height="20" Minimum="0" Maximum="100" Value="{Binding Transfer.Progress, Mode=OneWay}" Margin="2,0,2,0"/>
+											<TextBlock Text="{Binding Transfer.Progress, Mode=OneWay, StringFormat={}{0:0.0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										</Grid>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+			<TabItem Name="DebugTab" Header="Debug" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>					
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.LogClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear Log</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.LogUpdate" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/refresh.png"/>
+							<Button.ToolTip>
+								<ToolTip>Refresh</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="LogTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Commands" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<TextBox Name="LogTextBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" IsReadOnly="true">
+						<TextBox.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Clear Log" Command="ui:WpfCommand.LogClear" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Text, Converter={StaticResource EmptyToVisibilityConverter}}">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Refresh" Command="ui:WpfCommand.LogUpdate">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</TextBox.ContextMenu>
+					</TextBox>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</DockPanel>
+</Window>

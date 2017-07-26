@@ -1,0 +1,16 @@
+﻿<MenuItem x:Class="DemonSaw.RadioButtonMenu"
+		  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<MenuItem.Resources>
+		<RadioButton x:Key="RadioButtonResource" x:Shared="false" HorizontalAlignment="Center" GroupName="MenuItemRadio" IsHitTestVisible="False" IsChecked="{Binding Selected}"/>
+	</MenuItem.Resources>
+	<MenuItem.ItemContainerStyle>
+		<Style TargetType="MenuItem">
+			<Setter Property="Icon" Value="{DynamicResource RadioButtonResource}"/>
+			<EventSetter Event="Click" Handler="ClientMenu_Click" />
+		</Style>
+	</MenuItem.ItemContainerStyle>
+	<MenuItem.Icon>
+		<Image Source="Resources/16/group.png"/>
+	</MenuItem.Icon>
+</MenuItem>

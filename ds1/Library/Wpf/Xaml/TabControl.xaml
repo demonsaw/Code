@@ -1,0 +1,32 @@
+﻿<ResourceDictionary 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	>
+	<Style x:Key="DemonTab" TargetType="{x:Type TabItem}">
+		<Setter Property="Width" Value="80"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="TabItem">
+					<Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="SlateGray" CornerRadius="4,4,0,0" Margin="2,0">
+						<ContentPresenter x:Name="ContentSite"
+										VerticalAlignment="Center"
+										HorizontalAlignment="Center"
+										ContentSource="Header"
+										Height="18"
+										Margin="10,2"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsSelected" Value="True">
+							<Setter Property="Foreground" Value="Black"/>
+							<Setter TargetName="Border" Property="Background" Value="LightSkyBlue"/>
+						</Trigger>
+						<Trigger Property="IsSelected" Value="False">
+							<Setter Property="Foreground" Value="SlateGray"/>
+							<Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

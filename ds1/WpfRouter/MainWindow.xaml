@@ -1,0 +1,275 @@
+﻿<Window MinWidth="800" MinHeight="600"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:Custom="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Class="DemonSaw.MainWindow"		
+		xmlns:local="clr-namespace:DemonSaw" 
+		xmlns:ui="clr-namespace:DemonSaw.Wpf"
+		xmlns:tree='clr-namespace:DemonSaw.Wpf.TreeList;assembly=DemonSawLibrary'
+		Title="DemonSaw Router" Width="1024" Height="768" WindowStartupLocation="CenterScreen" Icon="Resources/Saw/orange.ico" Initialized="Window_Initialized" Loaded="Window_Loaded" Closed="Window_Closed">
+
+	<!-- Resources -->
+	<Window.Resources/>
+
+	<!-- Commands -->
+	<Window.CommandBindings>
+		<CommandBinding Command="ui:WpfCommand.Exit" Executed="ExitCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.About" Executed="AboutCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.RouterAdd" Executed="RouterAddCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.RouterRemove" Executed="RouterRemoveCommand_Executed" CanExecute="RouterDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.RouterEdit" Executed="RouterEditCommand_Executed" CanExecute="RouterDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.RouterUpdate" Executed="RouterUpdateCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.ServerAdd" Executed="ServerAddCommand_Executed" CanExecute="RouterDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.ServerRemove" Executed="ServerRemoveCommand_Executed" CanExecute="ServerDefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.ServerUpdate" Executed="ServerUpdateCommand_Executed" CanExecute="ServerDefaultCommand_CanExecute" />
+
+		<CommandBinding Command="ui:WpfCommand.LogUpdate" Executed="LogUpdateCommand_Executed" CanExecute="DefaultCommand_CanExecute" />
+		<CommandBinding Command="ui:WpfCommand.LogClear" Executed="LogClearCommand_Executed" CanExecute="LogClearCommand_CanExecute" />
+	</Window.CommandBindings>
+
+	<!-- Window -->
+	<DockPanel>
+		<Menu DockPanel.Dock="Top" Name="MainMenu">
+			<MenuItem Header="_File">
+				<MenuItem Header="_Exit" Command="ui:WpfCommand.Exit">
+					<MenuItem.Icon>
+						<Image Source="Resources/16/exit.png"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<MenuItem Header="_Help">
+				<MenuItem Header="_About" Command="ui:WpfCommand.About">
+					<MenuItem.Icon>
+						<Image Source="Resources/Saw/white.ico"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+		</Menu>
+		<TabControl SelectionChanged="TabControl_SelectionChanged">
+			<TabItem Name="RouterTab" Header="Routers" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="160" MinHeight="64"/>
+						<RowDefinition Height="4" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.RouterAdd" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/computer_add.png"/>
+							<Button.ToolTip>
+								<ToolTip>Add Router</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.RouterEdit" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/computer_edit.png"/>
+							<Button.ToolTip>
+								<ToolTip>Edit Router</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.RouterRemove" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/computer_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Remove Router</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.RouterUpdate" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/refresh.png"/>
+							<Button.ToolTip>
+								<ToolTip>Refresh</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="RouterListViewTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Routers" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<DataGrid Name="RouterListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single"  MouseLeftButtonUp="RouterListView_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUpSelect" KeyUp="RouterListView_KeyUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add Router" Command="ui:WpfCommand.RouterAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/computer_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Edit Router" Command="ui:WpfCommand.RouterEdit" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem, Converter={StaticResource NullToVisibilityConverter}}">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/computer_edit.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Remove Router" Command="ui:WpfCommand.RouterRemove" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem, Converter={StaticResource NullToVisibilityConverter}}">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/computer_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>								
+								<Separator/>
+								<MenuItem Header="Add Server" Command="ui:WpfCommand.ServerAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/server_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Refresh" Command="ui:WpfCommand.RouterUpdate">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn  Width="24" SortMemberPath="Server.Enabled">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<CheckBox Name="RouterListViewEnabled" IsChecked="{Binding Server.Enabled}" Checked="RouterListView_Enabled_CheckedChanged" Unchecked="RouterListView_Enabled_CheckedChanged"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Machine.Status">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/Status/none.png" Width="14" Height="14" Opacity="0.75"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Machine.Status, Converter={StaticResource StatusImageConverter}}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Machine.Status}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="128" Binding="{Binding Server.Name}" />
+							<DataGridTemplateColumn Header="Address" Width="120" SortMemberPath="Server.Address">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<ComboBox FontWeight="Normal" SelectedItem="{Binding Server.Address}" ItemsSource="{Binding Source={StaticResource GetAddresses}, StringFormat={}{0}}" DropDownClosed="RouterListView_Address_DropDownClosed"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Port" Width="64" Binding="{Binding Server.Port}"/>
+							<DataGridTextColumn Header="Entities" Width="64" Binding="{Binding Server.Entities}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Sessions" Width="64" Binding="{Binding Server.Sessions}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Clients" Width="64" Binding="{Binding Server.Clients}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Groups" Width="64" Binding="{Binding Server.Groups}" IsReadOnly="true"/>
+							<DataGridTextColumn Header="Passphrase" Width="352" Binding="{Binding Server.Passphrase}" />
+						</DataGrid.Columns>
+					</DataGrid>
+					<GridSplitter Grid.Row="2" Grid.ColumnSpan="2"/>					
+					<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.ServerAdd" IsTabStop="False">
+							<Image Source="Resources/16/server_add.png"/>
+							<Button.ToolTip>
+								<ToolTip>Add Server</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.ServerRemove" IsTabStop="False">
+							<Image Source="Resources/16/server_delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Remove Server</ToolTip>
+							</Button.ToolTip>
+						</Button>
+					</StackPanel>
+					<TextBlock Name="ServerListViewTextBlock" Grid.Row="3" Grid.Column="1" Text="0 Servers" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<DataGrid Name="ServerListView" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single" MouseLeftButtonUp="DataGrid_MouseLeftButtonUp" MouseRightButtonUp="DataGrid_MouseRightButtonUp" Style="{StaticResource DataGrid_Default_Style}" CellStyle="{StaticResource DataGrid_Default_CellStyle}">
+						<DataGrid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Add Server" Command="ui:WpfCommand.ServerAdd">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/server_add.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Remove Server" Command="ui:WpfCommand.ServerRemove">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/server_delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Update Servers" Command="ui:WpfCommand.ServerUpdate">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</DataGrid.ContextMenu>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Server.Enabled">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<CheckBox Name="ServerListViewEnabled" IsChecked="{Binding Server.Enabled, Mode=TwoWay}" Checked="ServerListView_Enabled_CheckedChanged" Unchecked="ServerListView_Enabled_CheckedChanged"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Width="24" SortMemberPath="Machine.Status">
+								<DataGridTemplateColumn.Header>
+									<Image Source="Resources/Status/none.png" Width="14" Height="14" Opacity="0.75"/>
+								</DataGridTemplateColumn.Header>
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Image Source="{Binding Machine.Status, Converter={StaticResource StatusImageConverter}}">
+											<Image.ToolTip>
+												<ToolTip Content="{Binding Machine.Status}"/>
+											</Image.ToolTip>
+										</Image>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTextColumn Header="Name" Width="128" Binding="{Binding Server.Name}" />
+							<DataGridTextColumn Header="Address" Width="248" Binding="{Binding Server.Address}" />
+							<DataGridTextColumn Header="Port" Width="64" Binding="{Binding Server.Port}" />
+							<DataGridTextColumn Header="Passphrase" Width="480" Binding="{Binding Server.Passphrase}" />
+						</DataGrid.Columns>
+					</DataGrid>					
+				</Grid>
+			</TabItem>
+			<TabItem Name="DebugTab" Header="Debug" Style="{StaticResource DemonTab}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="30" />						
+					</Grid.RowDefinitions>					
+					<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="32">
+						<Button Command="ui:WpfCommand.LogClear" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/delete.png"/>
+							<Button.ToolTip>
+								<ToolTip>Clear Log</ToolTip>
+							</Button.ToolTip>
+						</Button>
+						<Button Command="ui:WpfCommand.LogUpdate" IsTabStop="False" Margin="2,0,2,0">
+							<Image Source="Resources/16/refresh.png"/>
+							<Button.ToolTip>
+								<ToolTip>Refresh</ToolTip>
+							</Button.ToolTip>
+						</Button>						
+					</StackPanel>
+					<TextBlock Name="LogTextBlock" Grid.Row="0" Grid.Column="1" Text="0 Commands" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="2"/>
+					<TextBox Name="LogTextBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" IsReadOnly="true">
+						<TextBox.ContextMenu>
+							<ContextMenu>								
+								<MenuItem Header="Clear Log" Command="ui:WpfCommand.LogClear" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Text, Converter={StaticResource EmptyToVisibilityConverter}}">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/delete.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Refresh" Command="ui:WpfCommand.LogUpdate">
+									<MenuItem.Icon>
+										<Image Source="Resources/16/refresh.png"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</TextBox.ContextMenu>
+					</TextBox>
+					<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+						<Button Content="Destroy Sessions" Click="DebugTab_DestroySessions"/>
+					</StackPanel>					
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</DockPanel>
+</Window>

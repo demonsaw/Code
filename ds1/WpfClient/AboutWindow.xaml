@@ -1,0 +1,73 @@
+﻿<Window x:Class="DemonSaw.AboutWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:util="clr-namespace:DemonSaw.Utility;assembly=DemonSawLibrary"
+		Title="About" Width="480" Height="320" WindowStartupLocation="CenterOwner" Icon="Resources/Saw/white.ico" ResizeMode="NoResize"
+		Background="WhiteSmoke">
+	<Window.Resources>
+		<Style TargetType="StackPanel">
+			<Setter Property="Margin" Value="4"/>
+		</Style>
+		<Style TargetType="Grid">
+			<Setter Property="Margin" Value="2,0,2,4"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+		</Style>
+		<Style TargetType="TextBlock">
+			<Setter Property="Margin" Value="0,2,0,0"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="Margin" Value="2,0,0,0"/>
+		</Style>
+
+		<ObjectDataProvider x:Key="Assembly" ObjectType="{x:Type util:AssemblyInfo}"/>
+		<ObjectDataProvider x:Key="Title" ObjectInstance="{StaticResource Assembly}" MethodName="GetTitle"/>
+		<ObjectDataProvider x:Key="Product" ObjectInstance="{StaticResource Assembly}" MethodName="GetProduct"/>
+		<ObjectDataProvider x:Key="Version" ObjectInstance="{StaticResource Assembly}" MethodName="GetVersion"/>
+		<ObjectDataProvider x:Key="Copyright" ObjectInstance="{StaticResource Assembly}" MethodName="GetCopyright"/>
+		<ObjectDataProvider x:Key="Company" ObjectInstance="{StaticResource Assembly}" MethodName="GetCompany"/>
+		<ObjectDataProvider x:Key="Description" ObjectInstance="{StaticResource Assembly}" MethodName="GetDescription"/>
+	</Window.Resources>
+
+	<DockPanel LastChildFill="True">
+		<Canvas DockPanel.Dock="Left" Width="128" Height="Auto" Background="Black">
+			<Image Canvas.Top="48" Source="Resources/mask.bmp" Width="128" Height="Auto" VerticalAlignment="Center"/>
+		</Canvas>
+		<Border BorderThickness="2" BorderBrush="Black">
+			<DockPanel>
+				<StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+					<Button Width="Auto" Height="22" IsDefault="true" Click="AboutWindow_Okay">
+						<Button.ContentTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<Image Source="Resources/Status/green.png"/>
+									<TextBlock Margin="4,0,4,0">Okay</TextBlock>
+								</StackPanel>
+							</DataTemplate>
+						</Button.ContentTemplate>
+					</Button>
+				</StackPanel>
+				<Grid Grid.Row="0" Grid.Column="1" Height="256" Margin="8,4,0,0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Product}}" FontWeight="Bold"/>
+					<TextBlock Grid.Row="1" Text="{Binding Source={StaticResource Version}, StringFormat={}Version {0}}"/>
+					<TextBlock Grid.Row="2" Text="{Binding Source={StaticResource Copyright}}"/>
+					<TextBlock Grid.Row="3" Text="{Binding Source={StaticResource Company}}"/>
+					<TextBlock Grid.Row="4" Text="{Binding Source={StaticResource Description}}" VerticalAlignment="Top" Margin="0,112,0,0"/>
+					<Image Grid.Row="0" Grid.RowSpan="5" Width="256" Height="256" Source="/Resources/Anonymous.png" Opacity="0.05"/>
+				</Grid>
+			</DockPanel>
+		</Border>
+	</DockPanel>
+</Window>
