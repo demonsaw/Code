@@ -35,71 +35,63 @@
 using namespace eja;
 using namespace std;
 
-// Global
-runtime_controller g_runtime;
-bool g_active = true;
-
 // Menu
 void display_credits()
 {
-	std::cout << std::endl;
-	std::cout << "demonsaw 2.7.2" << std::endl;
-	std::cout << "May 29th, 2016" << std::endl;
-	std::cout << "Copyright 2014-2016 Demonsaw, LLC All Rights Reserved" << std::endl;
-	std::cout << "Believe in the Right to Share" << std::endl;
-	std::cout << default_value::website << std::endl;
-	std::cout << std::endl;
+	std::cout << "\ndemonsaw 2.7.2\n";
+	std::cout << "May 29th, 2016\n";
+	std::cout << "Copyright 2014-2016 Demonsaw, LLC All Rights Reserved\n";
+	std::cout << "Believe in the Right to Share\n";
+	std::cout << default_value::website << "\n\n";
 }
 
 void display_splash()
 {
 	display_credits();
-
-	std::cout << "(Press 'h' for help)" << std::endl;
-	std::cout << std::endl;
+	std::cout << "(Press 'h' for help)\n\n";
 }
 
 void display_menu()
 {
-	std::cout << std::endl;
+	std::cout << "\n";
 	std::cout << boost::format("  %-4s %-10s\n") % "c" % "clients";
 	std::cout << boost::format("  %-4s %-10s\n") % "r" % "routers";
 	std::cout << boost::format("  %-4s %-10s\n") % "t" % "transfers";
-	std::cout << std::endl;
+	std::cout << "\n";
 
 	std::cout << boost::format("  %-4s %-10s\n") % "h" % "help";
 	std::cout << boost::format("  %-4s %-10s\n") % "e" % "restart";
 	std::cout << boost::format("  %-4s %-10s\n") % "f" % "refresh";
 	std::cout << boost::format("  %-4s %-10s\n") % "q" % "quit";
 	std::cout << boost::format("  %-4s %-10s\n") % "v" % "version";		
-	std::cout << std::endl;
+	std::cout << "\n";
 }
 
 // Interface
-void load(int argc, char* argv[])
+void load(int argc, char* argv[], runtime_controller* ctrl)
 {
 	bool status = false;
 	const char* path = (argc > 1) ? argv[1] : "demonsaw.xml";
 
 	try
 	{		
-		status = g_runtime.load(path);
+		status = ctrl->load(path);
 	}
 	catch (...) { }
 
 	if (!status)
 	{
-		std::cerr << "ERROR: Unable to load " << path << std::endl;
-		exit(EXIT_SUCCESS);
+		std::cerr << "ERROR: Unable to load " << path << "\n";
+		std::exit(EXIT_FAILURE);
 	}
 }
 
-void monitor(int argc, char* argv[])
+void monitor(int argc, char* argv[], bool* active, runtime_controller* ctrl)
 {
 	// Create monitor thread
 	std::thread thread([]()
 	{
-		while (g_active)
+		while (*active)
 		{
 			// Refresh
 			boost::filesystem::path refresh("refresh");
@@ -107,7 +99,7 @@ void monitor(int argc, char* argv[])
 			if (file_util::exists(refresh))
 			{
 				file_util::remove(refresh);
-				g_runtime.refresh();
+				ctrl->refresh();
 			}
 
 			// Restart
@@ -116,7 +108,7 @@ void monitor(int argc, char* argv[])
 			if (file_util::exists(restart))
 			{
 				file_util::remove(restart);
-				g_runtime.restart();
+				ctrl->restart();
 			}
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(default_timeout::watchdog));
@@ -126,21 +118,21 @@ void monitor(int argc, char* argv[])
 	thread.detach();
 }
 
-void init()
+void init(runtime_controller* ctrl)
 {
-	g_runtime.init();
+	ctrl->init();
 }
 
-void shutdown()
+void shutdown(runtime_controller* ctrl)
 {
-	g_runtime.shutdown();
+	ctrl->shutdown();
 }
 
-void update()
+void update(bool* active, runtime_controller* ctrl)
 {
 	try
 	{
-		while (g_active)
+		while (*active)
 		{
 			std::cout << "demonsaw> ";
 
@@ -156,27 +148,27 @@ void update()
 			{
 				case 'c':
 				{
-					g_runtime.clients();
+					ctrl->clients();
 					break;
 				}
 				case 'e':
 				{
-					g_runtime.restart();
+					ctrl->restart();
 					break;
 				}
 				case 'f':
 				{
-					g_runtime.refresh();
+					ctrl->refresh();
 					break;
 				}
 				case 'r':
 				{
-					g_runtime.routers();
+					ctrl->routers();
 					break;
 				}
 				case 't':
 				{
-					g_runtime.transfers();
+					ctrl->transfers();
 					break;
 				}			
 				case 'v':
@@ -187,8 +179,8 @@ void update()
 				case 'q':
 				case 'x':
 				{
-					g_active = false;
-					g_runtime.shutdown();
+					*active = false;
+					ctrl->shutdown();
 					break;
 				}
 				case 'h':
@@ -202,7 +194,7 @@ void update()
 	}
 	catch (...)
 	{
-		std::cerr << "ERROR: Unknown exception in update loop" << std::endl;
+		std::cerr << "ERROR: Unknown exception in update loop\n"
 	}
 }
 
@@ -218,13 +210,16 @@ int main(int argc, char* argv[])
 	base64::encode("");
 	base64::decode("");
 
-	load(argc, argv);
+	runtime_controller g_runtime;
+	bool g_active = true;
+
+	load(argc, argv, &g_runtime);
 	monitor(argc, argv);
 	display_splash();
 
-	init();
-	update();
-	shutdown();
+	init(&g_runtime);
+	update(&g_active, &g_runtime);
+	shutdown(&g_runtime);
 
 #if 0
 	fout.close();
