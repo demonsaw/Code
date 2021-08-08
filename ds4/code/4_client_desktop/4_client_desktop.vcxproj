@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8CE5C70F-7F10-3A54-81A1-C3F62F47CE46}</ProjectGuid>
+    <RootNamespace>4_client_desktop</RootNamespace>
+    <Keyword>QtVS_v302</Keyword>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>..\..\build\bin\msvc2017_64\release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>..\..\build\tmp\4_client_desktop\msvc2017_64\release\</IntermediateDirectory>
+    <PrimaryOutput>4_client_desktop</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>..\..\build\bin\msvc2017_64\debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>..\..\build\tmp\4_client_desktop\msvc2017_64\debug\</IntermediateDirectory>
+    <PrimaryOutput>4_client_desktop</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
+    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;svg;widgets</QtModules>
+  </PropertyGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;svg;widgets</QtModules>
+  </PropertyGroup>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\build\bin\msvc2017_64\release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4_client_desktop</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\build\bin\msvc2017_64\debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4_client_desktop</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;C:/demonsaw/build/tmp/4_client_desktop/msvc2017_64/release/generated;..\4_core_gui;..\4_core_client;..\4_core;..\0_cryptopp;..\0_cpuid;..\0_msgpack\include;..\0_cppnetlib;..\0_boost;..\..\..\QT\5.14.2\MSVC2017_64\include;..\..\..\QT\5.14.2\MSVC2017_64\include\QtSvg;..\..\..\QT\5.14.2\MSVC2017_64\include\QtWidgets;..\..\..\QT\5.14.2\MSVC2017_64\include\QtGui;..\..\..\QT\5.14.2\MSVC2017_64\include\QtANGLE;..\..\..\QT\5.14.2\MSVC2017_64\include\QtCore;release;/include;..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\..\build\tmp\4_client_desktop\msvc2017_64\release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;QT_NO_DEBUG_OUTPUT;QT_NO_DEBUG;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;NDEBUG;QT_NO_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>C:\demonsaw\build\lib\msvc2017_64\release\4_core_gui-mt.lib;C:\demonsaw\build\lib\msvc2017_64\release\4_core_client-mt.lib;C:\demonsaw\build\lib\msvc2017_64\release\4_core-mt.lib;C:\demonsaw\build\lib\msvc2017_64\release\0_cryptopp-mt.lib;C:\demonsaw\build\tmp\0_cryptopp\msvc2017_64\release\x64masm.obj;C:\demonsaw\build\tmp\0_cryptopp\msvc2017_64\release\x64dll.obj;C:\demonsaw\build\lib\msvc2017_64\release\0_cpuid-mt.lib;C:\demonsaw\build\tmp\0_cpuid\msvc2017_64\release\masm-x64.obj;C:\demonsaw\build\lib\msvc2017_64\release\0_msgpack-mt.lib;C:\demonsaw\build\lib\msvc2017_64\release\0_cppnetlib-mt.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_atomic-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_chrono-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_date_time-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_filesystem-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_locale-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_regex-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_system-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_thread-vc141-mt-x64-1_69.lib;C:\demonsaw\lib\0_telemetry\msvc2017_64\notelemetry.obj;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\openssl\lib;C:\Utils\my_sql\mysql-5.7.25-winx64\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)\4_client_desktop.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;QT_NO_DEBUG_OUTPUT;QT_NO_DEBUG;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;NDEBUG;QT_NO_DEBUG;QT_SVG_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <QtMoc>
+      <CompilerFlavor>msvc</CompilerFlavor>
+      <Include>./$(Configuration)/moc_predefs.h</Include>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <DynamicSource>output</DynamicSource>
+      <QtMocDir>$(Configuration)</QtMocDir>
+      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
+    </QtMoc>
+    <QtRcc>
+      <Compression>default</Compression>
+      <InitFuncName>4_client_desktop</InitFuncName>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <QtRccDir>$(Configuration)</QtRccDir>
+      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
+    </QtRcc>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;C:/demonsaw/build/tmp/4_client_desktop/msvc2017_64/debug/generated;..\4_core_gui;..\4_core_client;..\4_core;..\0_cryptopp;..\0_cpuid;..\0_msgpack\include;..\0_cppnetlib;..\0_boost;..\..\..\QT\5.14.2\MSVC2017_64\include;..\..\..\QT\5.14.2\MSVC2017_64\include\QtSvg;..\..\..\QT\5.14.2\MSVC2017_64\include\QtWidgets;..\..\..\QT\5.14.2\MSVC2017_64\include\QtGui;..\..\..\QT\5.14.2\MSVC2017_64\include\QtANGLE;..\..\..\QT\5.14.2\MSVC2017_64\include\QtCore;debug;/include;..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\..\build\tmp\4_client_desktop\msvc2017_64\debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>C:\demonsaw\build\lib\msvc2017_64\debug\4_core_gui-mt-gd.lib;C:\demonsaw\build\lib\msvc2017_64\debug\4_core_client-mt-gd.lib;C:\demonsaw\build\lib\msvc2017_64\debug\4_core-mt-gd.lib;C:\demonsaw\build\lib\msvc2017_64\debug\0_cryptopp-mt-gd.lib;C:\demonsaw\build\tmp\0_cryptopp\msvc2017_64\debug\x64masm.obj;C:\demonsaw\build\tmp\0_cryptopp\msvc2017_64\debug\x64dll.obj;C:\demonsaw\build\lib\msvc2017_64\debug\0_cpuid-mt-gd.lib;C:\demonsaw\build\tmp\0_cpuid\msvc2017_64\debug\masm-x64.obj;C:\demonsaw\build\lib\msvc2017_64\debug\0_msgpack-mt-gd.lib;C:\demonsaw\build\lib\msvc2017_64\debug\0_cppnetlib-mt-gd.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_atomic-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_chrono-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_date_time-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_filesystem-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_locale-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_regex-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_system-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_boost\msvc2017_64\libboost_thread-vc141-mt-gd-x64-1_69.lib;C:\demonsaw\lib\0_telemetry\msvc2017_64\notelemetry.obj;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\openssl\lib;C:\Utils\my_sql\mysql-5.7.25-winx64\lib;C:\Utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\4_client_desktop.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;QT_SVG_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <QtRcc>
+      <Compression>default</Compression>
+      <InitFuncName>4_client_desktop</InitFuncName>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <QtRccDir>$(Configuration)</QtRccDir>
+      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
+    </QtRcc>
+    <QtMoc>
+      <CompilerFlavor>msvc</CompilerFlavor>
+      <Include>./$(Configuration)/moc_predefs.h</Include>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <DynamicSource>output</DynamicSource>
+      <QtMocDir>$(Configuration)</QtMocDir>
+      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
+    </QtMoc>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="delegate\browse\browse_delegate.cpp" />
+    <ClCompile Include="model\browse_model.cpp" />
+    <ClCompile Include="model\proxy\browse_proxy_model.cpp" />
+    <ClCompile Include="widget\browse_widget.cpp" />
+    <ClCompile Include="delegate\chat\chat_delegate.cpp" />
+    <ClCompile Include="model\chat_model.cpp" />
+    <ClCompile Include="delegate\chat\chat_row_delegate.cpp" />
+    <ClCompile Include="widget\chat_widget.cpp" />
+    <ClCompile Include="delegate\client\client_delegate.cpp" />
+    <ClCompile Include="model\client_model.cpp" />
+    <ClCompile Include="model\proxy\client_proxy_model.cpp" />
+    <ClCompile Include="widget\client_widget.cpp" />
+    <ClCompile Include="window\client_window.cpp" />
+    <ClCompile Include="delegate\delegate_util.cpp" />
+    <ClCompile Include="widget\docked_tab_widget.cpp" />
+    <ClCompile Include="model\download_model.cpp" />
+    <ClCompile Include="widget\download_widget.cpp" />
+    <ClCompile Include="widget\emoji_widget.cpp" />
+    <ClCompile Include="delegate\error\error_delegate.cpp" />
+    <ClCompile Include="model\error_model.cpp" />
+    <ClCompile Include="widget\error_widget.cpp" />
+    <ClCompile Include="delegate\io\file_name_delegate.cpp" />
+    <ClCompile Include="delegate\io\file_progress_delegate.cpp" />
+    <ClCompile Include="delegate\io\file_row_delegate.cpp" />
+    <ClCompile Include="model\finished_model.cpp" />
+    <ClCompile Include="widget\finished_widget.cpp" />
+    <ClCompile Include="widget\option\general_option_widget.cpp" />
+    <ClCompile Include="widget\global_widget.cpp" />
+    <ClCompile Include="delegate\group\group_cipher_delegate.cpp" />
+    <ClCompile Include="delegate\group\group_entropy_delegate.cpp" />
+    <ClCompile Include="delegate\group\group_hash_delegate.cpp" />
+    <ClCompile Include="delegate\group\group_key_size_delegate.cpp" />
+    <ClCompile Include="model\group_model.cpp" />
+    <ClCompile Include="delegate\group\group_percent_delegate.cpp" />
+    <ClCompile Include="delegate\group\group_row_delegate.cpp" />
+    <ClCompile Include="widget\group_widget.cpp" />
+    <ClCompile Include="widget\help_dialog.cpp" />
+    <ClCompile Include="widget\help_widget.cpp" />
+    <ClCompile Include="widget\image_widget.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="window\main_window.cpp" />
+    <ClCompile Include="widget\menu_widget.cpp" />
+    <ClCompile Include="widget\option\option_widget.cpp" />
+    <ClCompile Include="component\pixmap_component.cpp" />
+    <ClCompile Include="controller\pm_controller.cpp" />
+    <ClCompile Include="model\pm_model.cpp" />
+    <ClCompile Include="widget\pm_widget.cpp" />
+    <ClCompile Include="model\proxy\proxy_model.cpp" />
+    <ClCompile Include="config\qt_application.cpp" />
+    <ClCompile Include="delegate\radio_button_delegate.cpp" />
+    <ClCompile Include="controller\room_controller.cpp" />
+    <ClCompile Include="model\room_model.cpp" />
+    <ClCompile Include="widget\room_widget.cpp" />
+    <ClCompile Include="model\router_model.cpp" />
+    <ClCompile Include="widget\option\router_option_widget.cpp" />
+    <ClCompile Include="widget\router_widget.cpp" />
+    <ClCompile Include="delegate\row_delegate.cpp" />
+    <ClCompile Include="controller\search_controller.cpp" />
+    <ClCompile Include="model\search_model.cpp" />
+    <ClCompile Include="model\proxy\search_proxy_model.cpp" />
+    <ClCompile Include="widget\search_widget.cpp" />
+    <ClCompile Include="delegate\share\share_delegate.cpp" />
+    <ClCompile Include="model\share_model.cpp" />
+    <ClCompile Include="model\proxy\share_proxy_model.cpp" />
+    <ClCompile Include="widget\share_widget.cpp" />
+    <ClCompile Include="pane\statusbar_pane.cpp" />
+    <ClCompile Include="widget\statusbar_widget.cpp" />
+    <ClCompile Include="widget\option\system_option_widget.cpp" />
+    <ClCompile Include="widget\tab_widget.cpp" />
+    <ClCompile Include="delegate\time_delegate.cpp" />
+    <ClCompile Include="widget\option\transfer_option_widget.cpp" />
+    <ClCompile Include="model\upload_model.cpp" />
+    <ClCompile Include="widget\upload_widget.cpp" />
+    <ClCompile Include="widget\wizard_widget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="delegate\browse\browse_delegate.h" />
+    <QtMoc Include="model\browse_model.h">
+    </QtMoc>
+    <QtMoc Include="model\proxy\browse_proxy_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\browse_widget.h" />
+    <ClInclude Include="delegate\chat\chat_delegate.h" />
+    <QtMoc Include="model\chat_model.h">
+    </QtMoc>
+    <ClInclude Include="delegate\chat\chat_row_delegate.h" />
+    <ClInclude Include="widget\chat_widget.h" />
+    <ClInclude Include="delegate\client\client_delegate.h" />
+    <QtMoc Include="model\client_model.h">
+    </QtMoc>
+    <QtMoc Include="model\proxy\client_proxy_model.h">
+    </QtMoc>
+    <QtMoc Include="widget\client_widget.h">
+    </QtMoc>
+    <QtMoc Include="window\client_window.h">
+    </QtMoc>
+    <ClInclude Include="delegate\delegate_util.h" />
+    <QtMoc Include="widget\docked_tab_widget.h">
+    </QtMoc>
+    <QtMoc Include="model\download_model.h">
+    </QtMoc>
+    <QtMoc Include="widget\download_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\emoji_widget.h">
+    </QtMoc>
+    <ClInclude Include="delegate\error\error_delegate.h" />
+    <QtMoc Include="model\error_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\error_widget.h" />
+    <ClInclude Include="delegate\io\file_name_delegate.h" />
+    <ClInclude Include="delegate\io\file_progress_delegate.h" />
+    <ClInclude Include="delegate\io\file_row_delegate.h" />
+    <QtMoc Include="model\finished_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\finished_widget.h" />
+    <QtMoc Include="widget\option\general_option_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\global_widget.h">
+    </QtMoc>
+    <ClInclude Include="delegate\group\group_cipher_delegate.h" />
+    <ClInclude Include="delegate\group\group_entropy_delegate.h" />
+    <ClInclude Include="delegate\group\group_hash_delegate.h" />
+    <ClInclude Include="delegate\group\group_key_size_delegate.h" />
+    <QtMoc Include="model\group_model.h">
+    </QtMoc>
+    <ClInclude Include="delegate\group\group_percent_delegate.h" />
+    <ClInclude Include="delegate\group\group_row_delegate.h" />
+    <QtMoc Include="widget\group_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\help_dialog.h">
+    </QtMoc>
+    <QtMoc Include="widget\help_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\image_widget.h">
+    </QtMoc>
+    <QtMoc Include="window\main_window.h">
+    </QtMoc>
+    <QtMoc Include="widget\menu_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\option\option_pane.h">
+    </QtMoc>
+    <QtMoc Include="widget\option\option_widget.h">
+    </QtMoc>
+    <ClInclude Include="component\pixmap_component.h" />
+    <ClInclude Include="controller\pm_controller.h" />
+    <QtMoc Include="model\pm_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\pm_widget.h" />
+    <QtMoc Include="model\proxy\proxy_model.h">
+    </QtMoc>
+    <ClInclude Include="config\qt_application.h" />
+    <ClInclude Include="delegate\radio_button_delegate.h" />
+    <ClInclude Include="controller\room_controller.h" />
+    <QtMoc Include="model\room_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\room_widget.h" />
+    <QtMoc Include="model\router_model.h">
+    </QtMoc>
+    <QtMoc Include="widget\option\router_option_widget.h">
+    </QtMoc>
+    <ClInclude Include="widget\router_widget.h" />
+    <ClInclude Include="delegate\row_delegate.h" />
+    <ClInclude Include="controller\search_controller.h" />
+    <ClInclude Include="model\search_model.h" />
+    <QtMoc Include="model\proxy\search_proxy_model.h">
+    </QtMoc>
+    <QtMoc Include="widget\search_widget.h">
+    </QtMoc>
+    <ClInclude Include="delegate\share\share_delegate.h" />
+    <QtMoc Include="model\share_model.h">
+    </QtMoc>
+    <QtMoc Include="model\proxy\share_proxy_model.h">
+    </QtMoc>
+    <QtMoc Include="widget\share_widget.h">
+    </QtMoc>
+    <ClInclude Include="pane\statusbar_pane.h" />
+    <QtMoc Include="widget\statusbar_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\option\system_option_widget.h">
+    </QtMoc>
+    <QtMoc Include="widget\tab_widget.h">
+    </QtMoc>
+    <ClInclude Include="delegate\time_delegate.h" />
+    <QtMoc Include="widget\option\transfer_option_widget.h">
+    </QtMoc>
+    <QtMoc Include="model\upload_model.h">
+    </QtMoc>
+    <ClInclude Include="widget\upload_widget.h" />
+    <QtMoc Include="widget\wizard_widget.h">
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -Zi -MDd -W0 -GR -E ..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;debug\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -O2 -MD -W0 -GR -E ..\..\..\QT\5.14.2\MSVC2017_64\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;release\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="4_client_desktop.qrc">
+    </QtRcc>
+    <None Include="resource\font\NotoMono-Regular.ttf" />
+    <None Include="resource\font\NotoSans-Bold.ttf" />
+    <None Include="resource\font\NotoSans-Regular.ttf" />
+    <None Include="resource\tree\close.png" />
+    <None Include="resource\tree\down.png" />
+    <None Include="resource\drag_drop.png" />
+    <None Include="resource\font\emojione-svg.otf" />
+    <None Include="resource\font\fontawesome-4.7.0.otf" />
+    <None Include="resource\logo.ico" />
+    <None Include="resource\logo.svg" />
+    <None Include="resource\logo_black.png" />
+    <None Include="resource\logo_black.svg" />
+    <None Include="resource\logo_gray.png" />
+    <None Include="resource\logo_gray.svg" />
+    <None Include="resource\logo_rgb.png" />
+    <None Include="resource\logo_rgb.svg" />
+    <None Include="resource\logo_white.png" />
+    <None Include="resource\logo_white.svg" />
+    <None Include="resource\tree\open.png" />
+    <None Include="resource\style.css" />
+    <None Include="resource\title.svg" />
+    <None Include="resource\tree\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include=".\4_client_desktop.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

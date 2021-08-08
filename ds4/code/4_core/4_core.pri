@@ -1,0 +1,16 @@
+
+# Include
+include($$PWD/command/command.pri)
+include($$PWD/component/component.pri)
+include($$PWD/config/config.pri)
+include($$PWD/data/data.pri)
+include($$PWD/entity/entity.pri)
+include($$PWD/exception/exception.pri)
+include($$PWD/http/http.pri)
+include($$PWD/message/message.pri)
+include($$PWD/object/object.pri)
+include($$PWD/resource/resource.pri)
+include($$PWD/security/security.pri)
+include($$PWD/system/system.pri)
+include($$PWD/thread/thread.pri)
+include($$PWD/utility/utility.pri)

@@ -1,0 +1,40 @@
+<RCC>
+	<qresource prefix="/">
+		<!-- CSS -->
+		<file alias="style.css">resource/style.css</file>
+
+		<!-- ICO -->
+		<file alias="logo.ico">resource/logo.ico</file>
+
+		<!-- SVG -->
+		<file alias="logo.svg">resource/logo.svg</file>
+		<file alias="logo_rgb.svg">resource/logo_rgb.svg</file>
+		<file alias="logo_white.svg">resource/logo_white.svg</file>
+		<file alias="logo_gray.svg">resource/logo_gray.svg</file>
+		<file alias="logo_black.svg">resource/logo_black.svg</file>
+		<file alias="title.svg">resource/title.svg</file>
+
+		<!-- PNG -->
+		<file alias="drag_drop.png">resource/drag_drop.png</file>
+		<file alias="logo_rgb.png">resource/logo_rgb.png</file>
+		<file alias="logo_black.png">resource/logo_black.png</file>
+		<file alias="logo_gray.png">resource/logo_gray.png</file>
+		<file alias="logo_white.png">resource/logo_white.png</file>
+	</qresource>
+
+	<qresource prefix="/font">
+		<file alias="sans.ttf">resource/font/NotoSans-Regular.ttf</file>
+		<file alias="sans_bold.ttf">resource/font/NotoSans-Bold.ttf</file>
+		<file alias="mono.ttf">resource/font/NotoMono-Regular.ttf</file>
+		<file alias="emoji.ttf">resource/font/emojione-svg.otf</file>
+		<!--<file alias="emoji_color.ttf">resource/font/EmojiOneColor-SVGinOT.ttf</file>-->
+		<file alias="font_awesome.otf">resource/font/fontawesome-4.7.0.otf</file>
+	</qresource>
+
+	<qresource prefix="/tree">
+		<file alias="close.png">resource/tree/close.png</file>
+		<file alias="open.png">resource/tree/open.png</file>
+		<file alias="up.png">resource/tree/up.png</file>
+		<file alias="down.png">resource/tree/down.png</file>
+	</qresource>
+</RCC>

@@ -1,0 +1,2090 @@
+/*!!!
+Palette
+-------------------------------------------------------------------------
+Accents:
+
+Titan Blue: #0C9BDC
+Red (hover/pressed): #dc4d0c
+Selection Color & Dock Widget Buttons: #ceebf8
+-------------------------------------------------------------------------
+Greys:
+
+Background: #F9F9F9 and #FFFFFF for highlights
+Borders: #EDEDED, #D8D8D8, #C9C9C9, #E0E0E0 (buttons)
+Context Menu Separator, Chat Input Border: #D0D0D1
+Hamburger Menu (Buttons and Text), About Menu (Buttons and Captions): #797979
+Hamburger Menu Footer Background: #EDEDED
+Button Icons: #5D5E5E
+Statusbar Icons: #5D5E5E
+Default Text: #000000
+Pane Line: #C9C9C9
+Disabled: #B0B0B0
+Emoji Category Hover: #F4F4F4
+Top & Bottom Tab Buttons: (unselected): #D8D8D8, (selected): #F9F9F9, (hover): #EDEDED
+Top Tab Scroll Buttons:pressed (only visible when tabs exceed screen width): #9D9C9C
+
+-------------------------------------------------------------------------
+!!!*/
+
+/*
+
+			Commented by Bl4ckNeon with lots of love and many, many hours...
+							Last updated to Titan 0.44 Beta 14
+These comments might not be 100% and are based of my finding and personal theme modding.
+Some of these tags might be dead (not used) so I will try to label as much if I see any
+
+Anything starting with !!! and ending with !!! are original comments by Eijah/Cam
+Anything not starting and ending with !!! are my own
+
+A quick and dirty way to create a new theme is to get a program (notepad++, atom, some IDE) to find and replace all of the colors
+stated above with your own colors.
+
+
+
+
+Basic CSS stuff:
+color (text color in an element)
+background or background-color (Is the background color)
+padding and margin (Look up the box model)
+border (The border around something)
+
+
+ */
+
+/*!!! Main Text and Background !!!*/
+/*Doesn't do anything from what I find. Leave alone */
+QWidget, QApplication {
+	color: #000000;
+	background-color: #F9F9F9;
+}
+
+/*
+Background color for the options in options (mainly were it is used at)
+ */
+QWidget#border {
+	background-color: #FFFFFF;
+	border: 1px solid #EDEDED;
+}
+
+/*
+Controls the whole containter that the Emoji button is on as well as the users name and chat input box
+ */
+QWidget#border_solid {
+	border: 1px solid #EDEDED;
+	background: #FFFFFF;
+}
+
+/*
+Controls the color for the edge(only the edge is visible) of the help boxes that pop up in options when the ? is clicked on
+ */
+QWidget#dialog {
+	background: orange;
+	border: 1px solid #EDEDED;
+}
+
+/*
+The background color for the options page
+ */
+QWidget#pane_background {
+	background: #FFFFFF;
+}
+
+/*!!! Option Widget Button Background and Border!!!*/
+QWidget#option_button {
+	color: #E0E0E0; /*!!! Button Border !!!*/
+	background: #EDEDED; /*!!! Button Background !!!*/
+}
+
+/* Option Widget Button Background Hover */
+QWidget#option_button_hover {
+	background: #F4F4F4; /* Background Hover */
+}
+
+/* Hamburger Menu */
+/*This is the Titan logo in the bottom left of the "Hamburger Menu"
+Color doesn't do anything
+Border is only visible from the top, left and bottom. NOT the right side.
+ */
+QPushButton#hamburger_logo {
+	image: url(:/logo_gray.png);
+	background: transparent;
+	border: 1px solid #D8D8D8;
+	border-right: 0;
+	color: #797979;
+	font-size: 14px;
+	padding: 10px;
+}
+
+/*
+This is the color when you hover over the titan logo in the Hamburger Menu.
+
+PLEASE NOTE!!!!!!
+If you want your theme to be shipped with titan then it must keep the background color the same #0C9BDC
+ */
+QPushButton#hamburger_logo:hover {
+	image: url(:/logo_white.png);
+	border: 1px solid #D8D8D8;
+	background: #0C9BDC;
+}
+
+/*
+This is the ? icon, the Save icon, and the Power button icon
+Color changes the color of these items
+ */
+QPushButton#hamburger_logo_exit, QPushButton#hamburger_logo_save, QPushButton#hamburger_logo_website {
+	background: transparent;
+	border: 0;
+	color: #797979;
+	font-size: 19px;
+	padding: 10px;
+}
+
+/*
+The color when you hover over the ? and the Save icons
+ */
+QPushButton#hamburger_logo_website:hover, QPushButton#hamburger_logo_save:hover {
+	background: #E0E0E0;
+	border: 1px solid #D8D8D8;
+}
+
+/*
+When you hover over the Power icon
+ */
+QPushButton#hamburger_logo_exit:hover {
+	background: #52c175;
+	border: 1px solid #D8D8D8;
+	color: #FFFFFF;
+}
+
+/*
+Doesnt do anything
+ */
+QToolBar#hamburger_logo {
+	border-top: 1px solid #D8D8D8;
+	border-bottom: 0;
+}
+
+/*
+The background color and border for the whole menu when you expand it.
+NOT the items in it but the menu its self
+ */
+QWidget#hamburger_menu {
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+}
+
+/*
+You can have the top 6 menu items (Chat, Browse, Search, Users, Share, Group, Downloads, Uploads, Finished) take the
+background color of the "QWidget#hamburger_menu" background, OR you can assign your own by changing it from transparent
+ */
+QWidget#hamburger_container {
+	margin: 0;
+	padding: 0;
+	background: transparent;
+}
+
+/*
+When you hover over any of the top 6 menu items
+ */
+QWidget#hamburger_container:hover {
+	background: #EDEDED;
+	border: 1px solid #D8D8D8;
+}
+
+/*
+Same as the "QWidget#hamburger_container" but for the bottom 3 (Routers, Options, Errors)
+ */
+QWidget#hamburger_container_bottom {
+	margin: 0;
+	background: transparent;
+}
+
+/*
+Same as "QWidget#hamburger_container:hover" but for the bottom 3
+ */
+QWidget#hamburger_container_bottom:hover {
+	background: #EDEDED;
+	border: 1px solid #D8D8D8;
+	border-bottom: 0;
+}
+
+/*
+Changed the color of the menu icons, all 12 of them
+ */
+QPushButton#hamburger_button {
+	background: none;
+	border: none;
+	color: #797979;
+	font-size: 28px;
+}
+
+/*
+Changes the color of the Text of all 12 labels (under the icons)
+ */
+QLabel#hamburger_label {
+	background: none;
+	font-size: 15px;
+	color: #797979;
+}
+
+/*
+Changes the background color of all 4 of the icon on the bottom (Titan logo, Help icon, Save icon, power icon)
+Can change the border too
+ */
+QWidget#hamburger_footer {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #D8D8D8;
+	background: #EDEDED;
+}
+
+/*
+Can also change the color of the bottom footer area
+PLEASE NOTE!!!!
+This color WILL over ride any background color you set as on "QWidget#hamburger_footer"
+Tested this with "QWidget#hamburger_footer" coming after "QToolBar#hamburger_toolbar" but it looks like the toolbar is layered above the footer
+ */
+QToolBar#hamburger_toolbar {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+}
+
+/*
+Controls all of the check boxes in the app
+Can Change the background color and it will add it to the checkbox and any text lables next to it
+ */
+QCheckBox {
+	background: transparent;
+	spacing: 4px;
+	padding-right: 12px;
+}
+
+/*
+Controls ANY drop down box (like the ones asking what kind of key size you want (under groups) or what Hashing algo you want (Settinsg -> System)
+ALSO controls the colors of the file browser (when searching for files/locations on your hard drive). Mainly seen when sharing files or searching where to dl too
+Background: Controls the background color to the whole area where that type is used *Pick with caution*
+Selection-color: The current background color of the item selected
+Selection-background-color: The background color to what you are hovering over
+ */
+QComboBox, QListView {
+	height: 18px;
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+	show-decoration-selected: 0;
+}
+
+/*
+Is used for the placement of the arrow icon in the dropdown box.
+Don't need to mess with it
+ */
+QComboBox::drop-down {
+	height: 18px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+Don't really need to mess with it
+Has to do with the arrow icon
+ */
+QComboBox::down-arrow {
+	width: 12px;
+	height: 12px;
+	padding-top: 2px;
+	image: url(:/tree/down.png);
+}
+
+/*
+Has to do with the arrow icons again
+Don't mess with it
+ */
+QComboBox#options::down-arrow {
+	width: 12px;
+	height: 12px;
+	padding-top: 10px;
+	image: url(:/tree/down.png);
+}
+
+/*
+Can't find what it does
+Usally just leave it alone
+ */
+QDockWidget::close-button, QDockWidget::float-button {
+	border: 0;
+	margin: 0;
+}
+
+/*
+Can't find what it does, seems to have no effect
+ */
+QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+	background: #ceebf8;
+	border: 0;
+	margin: 0;
+}
+
+/*
+Seems to be only used for the "Percent" in the Group tab
+ */
+QDoubleSpinBox {
+	height: 19px;
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+	padding: 0;
+	/*!!! make room for the arrows !!!*/
+}
+
+/*
+Don't mess with.
+Positions the arrow for the box
+ */
+QDoubleSpinBox::up-button {
+	subcontrol-origin: border;
+	subcontrol-position: top right;
+	width: 16px;
+	border-width: 1px;
+}
+
+/*
+Just formatting stuff
+ */
+QDoubleSpinBox::up-arrow {
+	image: url(:/tree/up.png);
+	width: 12px;
+	height: 12px;
+	top: 1px;
+}
+
+/*
+More formatting stuff
+ */
+QDoubleSpinBox::down-button {
+	subcontrol-origin: border;
+	subcontrol-position: bottom right;
+	width: 16px;
+	border-width: 1px;
+}
+
+/*
+More formatting stuff
+"u give me diamonds
+i give u n0thing
+u cant own me
+i like a dolphin" -FAQ77X
+ */
+QDoubleSpinBox::down-arrow {
+	image: url(:/tree/down.png);
+	width: 12px;
+	height: 12px;
+	bottom: 1px;
+}
+
+/*!!! Group Box !!!*/
+/*
+Has to do with the content boxes in the settings.
+Ex. Under General there are 4 content boxes: User, Chat Notifications, PM Notifications, Room Notifications
+You can change the background to transparent to take on what ever the background color is of the parent element
+
+ */
+QGroupBox {
+	background: #FFFFFF;
+	font-weight: bold;
+	border: 0;
+
+}
+
+/*
+Apperently it is the lables in the options tab, BUT I can not seem to change anything.
+Good luck
+ */
+QGroupBox::title {
+
+	background: transparent;
+	subcontrol-origin: margin;
+	subcontrol-position: top left;
+	padding-left: 4px;
+	padding-top: -5px;
+}
+
+/*
+Formatting, nothing here
+ */
+QHBoxLayout {
+
+	border: 0;
+	margin: 0;
+}
+
+/*
+Controls all of the details in the top of each tab.
+Ex. In the Browse tab you have "Name", "Type", and "Size". Each one is it's own "QHeaderView"
+Can add Background or color to change stuff around
+ */
+QHeaderView {
+	border: 0;
+	border-top: 1px solid #EDEDED;
+}
+
+/*
+Also controls all of them also
+ */
+QHeaderView::section {
+	background-color: transparent;
+	border: 0;
+}
+
+/*
+Once again, it controls all of them that I can find
+ */
+QHeaderView::section:horizontal {
+	height: 24px;
+	border: 0;
+	border-right: 1px solid #EDEDED;
+	border-bottom: 1px solid #EDEDED;
+	padding-left: 4px;
+}
+
+/*
+Can't seem to find anything that is effected by this tag
+ */
+QHeaderView#stretch::section:horizontal {
+	height: 24px;
+	border: 0;
+	border-bottom: 1px solid #EDEDED;
+	padding-left: 4px;
+}
+
+/*
+The first one in the line.
+Ex. Under browse Name would be selected under this tag.
+Mainly used for formating and making things look nice
+ */
+QHeaderView::section:horizontal:first {
+	border: 0;
+	border-right: 1px solid #EDEDED;
+	border-bottom: 1px solid #EDEDED;
+	padding-left: 4px;
+}
+
+/*
+Same as "QHeaderView::section:horizontal:first" but the last item
+ */
+QHeaderView::section:horizontal:last {
+	border: 0;
+	border-bottom: 1px solid #EDEDED;
+	border-right: 1px solid #EDEDED;
+	padding-right: 8px;
+}
+
+/*
+Controls the down arrow for sorting
+Ex. Under Routers, the "Address" HeaderView has a Down arrow and an Up arrow so you can sort
+This controls the down arrow properties
+ */
+QHeaderView::down-arrow {
+	image: url(:/tree/down.png);
+	height: 12px;
+	width: 12px;
+	subcontrol-position: right center;
+	padding-right: 6px;
+}
+
+/*
+Same as "QHeaderView::down-arrow" but for the Up arrow position
+ */
+QHeaderView::up-arrow {
+	image: url(:/tree/up.png);
+	height: 12px;
+	width: 12px;
+	subcontrol-position: right center;
+	padding-right: 6px;
+}
+
+/*
+Pretty much any static text in the whole app
+This controls a lot.
+Tip: add the color tag to change the color of the text
+Ex. color:blue; or color:#2196F3;
+ */
+QLabel {
+
+	background: transparent;
+}
+
+/*!!! Common grid borders !!!*/
+/*
+Cant seem to find what this is
+ */
+QLabel#help {
+	font-weight: bold;
+	margin: 0;
+	margin-bottom: 3px;
+}
+
+/*
+Also can not find out what this is. May not be used or just a place holder which gets changed by the program
+
+ */
+QLabel#option_unsaved {
+	color: #dc4d0c;
+}
+
+/*
+Any Text box that is NOT the main chat box
+Includes: The search bar, name bar, download folder path, entropy field
+This one is important
+ */
+QLineEdit {
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+	padding: 0 4px;
+}
+
+/*
+Separates the different major windows. By default there is a line between the Chat window and the Users list.
+If you have downloads, uploads, or errors then it will add one more separator between the users and chat tab
+ */
+QMainWindow::separator {
+	width: 3px;
+	padding: 0px;
+	background: transparent;
+}
+
+/*
+The right click menu
+ */
+QMenu {
+	background-color: #FFFFFF;
+	border: 1px solid #EDEDED;
+}
+
+/*
+What separats the options in the right click menu
+Ex. For chat if you right click there will be one between the "Message and Mute options, the Remove and Clear, and Close"
+ */
+QMenu::separator {
+	height: 1px;
+	background: #D0D0D1;
+	margin: 0px;
+}
+
+/*
+Can control each item in the right click menu
+You can add color and background if you want
+Tip: You can also use background in the "QMenu" tag
+ */
+QMenu::item {
+	height: 22px;
+	alignment: left center;
+	padding: 4px 24px 4px 28px;
+}
+
+/*
+When you hover over something in the right click menu
+ */
+QMenu::item:selected {
+	background: #EDEDED;
+}
+
+/*
+Is used if there is an icon on the right click menu
+Ex. A mail icon for the option message
+ */
+QMenu::icon {
+	background: transparent;
+	margin-left: 8px;
+}
+
+/*
+Can't find out what this does
+Not very important
+ */
+QMenu::indicator {
+	margin-left: 4px;
+
+}
+
+/*!!! Top Menu Bar !!!*/
+QMenuBar {
+	border: 0;
+	border-bottom: 1px solid #EDEDED;
+	margin: 0;
+	padding: 0;
+}
+
+/*!!! Text Input Chat Box !!!*/
+/*
+Might be dead. Can't seem to find it, even though it says Chat box.
+IT LIES >:'(
+ */
+QPlainTextEdit {
+	background: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #D0D0D1;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+}
+
+/*
+Controls the buttons in the app (certian ones)
+Mainly when you share something and open up the search menu (the Choice and cancel buttons)
+ */
+QPushButton {
+	background: #EDEDED;
+	border: 1px solid #E0E0E0;
+	padding: 4px;
+}
+
+/*
+Same buttons but when you hover over them
+ */
+QPushButton:hover {
+	background: #F9F9F9;
+}
+
+/*
+Same buttons but pressed
+ */
+QPushButton:checked, QPushButton:pressed {
+	background-color: #FFFFFF;
+}
+
+/*
+Can not find what this does
+Mightbe dead
+ */
+QPushButton#rounded_button {
+	border-radius: 4px;
+	border: 1px solid #EDEDED;
+	background-color: #FFFFFF;
+	color: #5D5E5E;
+	padding: 3px;
+}
+
+/*
+Can not find
+ */
+QPushButton#rounded_button:hover {
+	color: #dc4d0c;
+}
+
+/*
+Can Not find
+ */
+QPushButton#rounded_button:pressed {
+	color: #0C9BDC;
+}
+
+/*
+Any Radio buttons. Currently it does not do anything.
+ */
+QRadioButton {
+	background: transparent;
+	spacing: 4px;
+	padding-right: 12px;
+}
+
+/*!!! Scroll !!!*/
+/*
+Currently I can only find it in the options tab around the top, left and bottom
+Nothing really big
+ */
+QScrollArea {
+	border: 1px solid #EDEDED;
+}
+
+/*
+The background color of the scroll bar area (not the bar is self)
+The tag "color" will do nothing
+ */
+QScrollBar {
+	border: 1px solid #EDEDED;
+	background: transparent;
+	margin: 0;
+}
+
+/*
+Controls all of the vertical scroll bars.
+Tip: The tag background can be added and WILL override the background color in "QScrollBar"
+ */
+QScrollBar:vertical {
+	border: 0;
+	border-left: 1px solid #EDEDED;
+	width: 16px;
+}
+
+/*
+Currently can not find.
+Use "QScrollBar:vertical" if you wish to change things about the scroll bar
+ */
+QScrollBar#browse:vertical {
+	border: 0;
+	border-left: 1px solid #EDEDED;
+	border-top: 1px solid #EDEDED;
+	width: 16px;
+}
+
+/*!!! Scrollbar Slider - Vertical !!!*/
+/*
+Changes the actually properties of the scroll bar that you click and drag
+Can change the color with background
+ */
+QScrollBar::handle:vertical {
+	background: #C9C9C9;
+	min-height: 48px;
+	margin: 16px;
+}
+
+/*
+Changes the squares on the top and bottom of the scroll bar
+Background changes the color of them
+ */
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+	width: 2px;
+	height: 3px;
+	background: #FFFFFF;
+	border: 1px solid #C9C9C9;
+	padding-left: 1px;
+}
+
+/*
+This is a layer over everything but the scroll bar. Would not recommend using
+
+ */
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	background: transparent;
+}
+
+/*
+The area around "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical"
+Tip: Add background to change the color of everything but the inner box
+ */
+QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical {
+	border: 0;
+
+}
+
+/*
+Controls any horizontal scroll bars.
+Currently only one is in use when you browse your files to share something or to download too
+ */
+QScrollBar:horizontal {
+	border-right: 0;
+	border-left: 0;
+	border-bottom: 0;
+	height: 16px;
+
+}
+
+/*!!! Scrollbar Slider - Horizontal !!!*/
+/*
+Same as "QScrollBar::handle:vertical" but for horizontal
+ */
+QScrollBar::handle:horizontal {
+	border: 0;
+	background: #C9C9C9;
+	min-width: 64px;
+}
+
+/*
+Same as "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical" but for horizontal
+ */
+QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+	width: 3px;
+	height: 3px;
+	background: #C9C9C9;
+}
+
+/*
+Same as "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical" but for horizontal
+ */
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: transparent;
+}
+
+/*
+Same as "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical" but for horizontal
+ */
+QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
+	border: 0;
+}
+
+/*!!! SpinBox !!!*/
+/*
+Used to control single unit spin boxes. Lots of them in options, groups, and global settings
+
+Background: Controls the background color to the whole area where that type is used *Pick with caution*
+Selection-color: The current background color of the item selected
+Selection-background-color: The background color to what you are hovering over
+ */
+QSpinBox {
+	height: 18px;
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+	padding: 0;
+	padding-right: 4px;
+	/* make room for the arrows */
+}
+
+/*
+No Spinboxes are disabled. Seems to be for debugging
+Dead
+ */
+QSpinBox::disabled {
+	background: #EDEDED;
+}
+
+/*
+Has to do with the placement of the up arrow
+Don't really need to change
+ */
+QSpinBox::up-button {
+	subcontrol-origin: border;
+	subcontrol-position: top right;
+	width: 16px;
+	border-width: 1px;
+}
+
+/*
+Same as ^
+Don't need to mess with
+ */
+QSpinBox::up-arrow {
+	image: url(:/tree/up.png);
+	width: 12px;
+	height: 12px;
+	top: 1px;
+}
+
+/*
+Same as ^
+Formatting stuff
+ */
+QSpinBox::down-button {
+	subcontrol-origin: border;
+	subcontrol-position: bottom right;
+	width: 16px;
+	border-width: 1px;
+}
+
+/*
+Formatting things. Mainly just the same as ^
+ */
+QSpinBox::down-arrow {
+	image: url(:/tree/down.png);
+	width: 12px;
+	height: 12px;
+	bottom: 1px;
+}
+
+/*
+Can be seen between the chat panel and the chat input outer container
+Must add the background tag if you want to see the change
+
+ */
+QSplitter, QSplitter:vertical, QSplitter:horizontal {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Pretty much the same thing if you add a background tag for the "QSplitter, QSplitter:vertical, QSplitter:horizontal" tag
+ */
+QSplitter::handle {
+	background: transparent;
+}
+
+/*
+Can be the same thing as "QSplitter::handle" for color purposes if you add the background tag
+ */
+QSplitter:vertical {
+	height: 3px;
+}
+
+/*
+Can't seem to exactly were this tag is
+Not important color wise
+ */
+QSplitter:horizontal {
+	width: 3px;
+
+}
+
+/*
+The top and bottom of the status bar. Also contains a weird shape to the right of the actual status bar
+PLEASE NOTE!!!!
+The status bar is all of the icons and numbers on the bottom right of the app
+Tip:The color tag does nothing here
+ */
+QStatusBar {
+	background: #F9F9F9;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+/*!!! Tab Widget !!!*/
+/*
+Controls the "empty" space between the tab bar and the far right of the app window
+The tab bar is (by default) what is right of the 3 bottom tabs (Chat, browse, share).
+Tip: Add background to change the default color
+ */
+QTabBar, QTabWidget {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-bottom: 1px solid #EDEDED;
+	border-left: 1px solid #EDEDED;
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+If you add background you can control the background for the Global settings page
+ */
+QStackedWidget {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+/*
+Can't seem to find it
+ */
+QTabWidget::tab-bar {
+	background: #EDEDED;
+	border: 0;
+	left: 0;
+}
+
+/*
+Can't seem to find it
+ */
+QTabWidget::pane {
+
+	padding: 0;
+	margin: 0;
+}
+
+/*!!! Tab Bar - Top !!!*/
+/*
+The X button on the client tabs (Very top where it says your Client name)
+ */
+QPushButton#close_button {
+	color: #5D5E5E;
+	border: 0;
+	background: 0;
+}
+
+/*
+The container for the rounded tabs on the top.
+Once you change the background then you will see it
+ */
+QTabBar#bar, QTabBar#bar_unselected {
+	background: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	border-bottom: 1px solid #EDEDED;
+}
+
+/*!!!---- Right scroll buttons START ---!!!*/
+/*
+If someone has lots of tabs a left and right arrow will show up
+ */
+QTabBar QToolButton {
+	background: #F9F9F9;
+	border-radius: 6px;
+	border: 1px solid #D8D8D8;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+Same arrows when you hover over one
+ */
+QTabBar QToolButton:hover {
+	background: #D8D8D8;
+}
+
+/*
+Same arrow when you press it
+ */
+QTabBar QToolButton:pressed {
+	background: #9D9C9C;
+}
+
+/*!!!---- Right scroll buttons END ---!!!*/
+/*
+Controls the client tabs on the very top. These do not control any tabs that are currently selected or hovered over
+ */
+QTabBar#bar::tab, QTabBar#bar_unselected::tab:selected, QTabBar#bar_unselected::tab {
+	background: #D8D8D8;
+	border: 1px solid #D8D8D8;
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
+	border-bottom: 3px solid #D8D8D8;
+	height: 18px;
+	width: 188px;
+	padding: 6px;
+	margin: 0;
+}
+
+/*
+Controls the user tabs that currently selected to be used
+ */
+QTabBar#bar::tab:selected {
+	background: #F9F9F9;
+	border: 1px solid #EDEDED;
+	border-top: 1px solid #EDEDED;
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
+	border-bottom: 3px solid #F9F9F9;
+}
+
+/*
+Controls the user tabs that are hovered over AND currently selected
+ */
+QTabBar#bar::tab:selected:hover {
+	background: #F9F9F9;
+	border: 1px solid #EDEDED;
+	border-top: 1px solid #EDEDED;
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
+	border-bottom: 3px solid #F9F9F9;
+}
+
+/*
+Controls the user tab that the user is hovering over and is NOT currently selected
+ */
+QTabBar#bar::tab:hover, QTabBar#bar_unselected::tab:hover {
+	background: #EDEDED;
+	border: 1px solid #EDEDED;
+	border-top: 1px solid #EDEDED;
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
+	border-bottom: 3px solid #EDEDED;
+}
+
+/*!!! Tab Bar - Below Chat !!!*/
+
+/*!!! Tab Text Color !!!*/
+/*
+Text color of the tabs (such as Chat, Browse, Share...)
+Tip: The tag Background color does nothing
+ */
+QWidget#docked_tab {
+	color: #5D5E5E;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+Controls the background color of the tabs. More or less the same as "QWidget#docked_tab" but does not control the text color
+Tip: The tag color does nothing here
+ */
+QTabBar::tab {
+	background: #D8D8D8;
+	height: 22px;
+	width: 100px;
+	margin: 0;
+	padding: 3px;
+	border-left: 1px solid transparent;
+	border-right: 1px solid #EDEDED;
+	border-bottom: 1px solid #EDEDED;
+}
+
+/*
+Cant find it
+Tip: Color and background does nothing
+ */
+QTabBar::tab-bar {
+	alignment: left;
+	border: 0;
+	padding: 3px;
+	top: 4px;
+	left: 0;
+}
+
+/*
+Controls the color for when you hover over a tab
+ */
+QTabBar::tab:hover {
+	background: #EDEDED;
+}
+
+/*
+Controls the first tab
+Tip: You can use background
+ */
+QTabBar::tab:first {
+	border-left: 1px solid #EDEDED;
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+Controls the first tab if it is selected but not if it is hovered over
+Tip: You can use background
+ */
+QTabBar::tab:first:selected {
+	border-left: 1px solid #EDEDED;
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+Controls the last tab
+Tip: You can use background
+ */
+QTabBar::tab:last {
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+Controls the last tab if it is selected but not hovered over
+ */
+QTabBar::tab:last:selected {
+	border-left: 1px solid transparent;
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+Controls the tab if it is selected and NOT the first OR last tab
+ */
+QTabBar::tab:selected {
+	background: #F9F9F9;
+	border-left: 1px solid transparent;
+	border-right: 1px solid #EDEDED;
+}
+
+/*
+Controls the tab if it is selected and hovered if it is NOT the first OR last tabs
+ */
+QTabBar::tab:selected:hover {
+	background: #F9F9F9;
+}
+
+/*!!! Top Buttons  (Hamburger, Settings, Refresh, Plus) and others !!!*/
+/*
+Controls the properties for the objects that are mentioned (Hamburger menu, settings button, refresh button, the plus and the help button)
+The @help buttons are the ? in Options
+Color does NOT change the color of the ? buttons
+ */
+QPushButton#hamburger, QPushButton#settings, QPushButton#plus, QPushButton#refresh, QPushButton#option_help {
+	background: transparent;
+	border: 0;
+	color: #5D5E5E;
+}
+
+/*
+Controls the layout for the hamburger menu.
+Does not control the color or background color
+ */
+QPushButton#hamburger {
+	padding: 0;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+/*
+Layout for the refresh button
+ */
+QPushButton#refresh, QPushButton#refresh_active {
+	padding: 8px;
+}
+
+/*
+More layout stuff
+ */
+QPushButton#settings, QPushButton#settings_active {
+	padding-right: 7px;
+}
+
+/*
+More layout stuff
+ */
+QPushButton#plus, QPushButton#plus_active {
+	padding-left: 8px;
+}
+
+/*
+Controls the color of the plus button (add client) and the global settings if currently in
+(Not clicked but if you click and go into the settings menu)
+ */
+QPushButton#plus_active, QPushButton#settings_active {
+	color: #0C9BDC;
+	background: transparent;
+	border: 0;
+}
+
+/*
+When the refresh button flashes green (When it is telling you to refresh (if you shared something or changed a group)
+The color changes the refresh the button icon its self NOT the flashing color
+ */
+QPushButton#refresh_active {
+	color: #F9F9F9;
+	border: 0;
+}
+
+/*
+Same thing as "QPushButton#refresh_active" but when you hover over it
+ */
+QPushButton#refresh_active:hover {
+	color: #F9F9F9;
+	border: 0;
+}
+
+/*
+The Titan logo and text saying "Titan" right next to the search text field
+Tip: Color only changed the text saying "Titan" not the logo
+ */
+QPushButton#search_logo {
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	border-right: 0;
+	color: #0C9BDC;
+	padding: 0 4px;
+}
+
+/*
+Same as "QPushButton#search_logo" but when you hover over it.
+Tip: You can add color
+ */
+QPushButton#search_logo:hover {
+	background: #F9F9F9;
+}
+
+/*
+Controls the color for the Global settings icon(hover), the add client button(hover), the refresh icon(hover), the search logo(the Titan logo and the text "titan")(Mouse button clicked)
+The X button to close a client tab(hover), and the ? marks(hover)
+ */
+QPushButton#settings:hover, QPushButton#plus:hover, QPushButton#refresh:hover, QPushButton#hamburger:hover, QPushButton#search_logo:pressed, QPushButton#close_button:hover, QPushButton#option_help:hover {
+	color: #dc4d0c;
+}
+
+/*
+Same as ^ but when pressed
+ */
+QPushButton#settings:pressed, QPushButton#plus:pressed, QPushButton#refresh:pressed, QPushButton#hamburger:pressed, QPushButton#close_button:pressed, QPushButton#option_help:pressed {
+	color: #0C9BDC;
+}
+
+/*
+Is not used since all of them are activated and in use
+ */
+QPushButton#settings:disabled, QPushButton#plus:disabled, QPushButton#refresh:disabled, QPushButton#hamburger:disabled, QPushButton#close_button#disabled {
+	color: #b0b0b0;
+}
+
+/*!!! About Menu !!!*/
+/*
+The menu that comes up when you hit the titan logo and text right left of the search bar
+ */
+QWidget#about_menu {
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+}
+
+/*
+Controls the top half of the about menu (The "About" option)
+Tip: Color does nothing
+ */
+QWidget#about_menu_container_top {
+	background: transparent;
+	border-bottom: 1px solid #D8D8D8;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+Controls the about menu when you hover over it
+ */
+QWidget#about_menu_container_top:hover, #about_menu_container:hover {
+	padding: 0;
+	margin: 0;
+	background: #EDEDED;
+	border: 1px solid #D8D8D8;
+}
+
+/*
+Mainly just for formatting but background can be added to control the color of just the bottom background when hovered over
+ */
+QWidget#about_menu_container:hover {
+	border-top: 0;
+
+}
+
+/*
+Controls the bottom half of the about menu
+ */
+QWidget#about_menu_container {
+	background: transparent;
+	border-bottom: 1px solid #D8D8D8;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+Controls the titles in the about menu ("About" and "Help")
+The color and the background can be changed
+ */
+QLabel#about_menu_title {
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	color: #5D5E5E;
+}
+
+/*
+Controls the color and background color of the caption text in the about menu
+Color has no effect on the icons in the about menu but background does effect both icon background and text background
+ */
+QLabel#about_menu_caption, QLabel#about_menu_icon {
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	color: #797979;
+}
+
+/*
+Controls the color of the ? in the about menu. The titan logo stays the same
+ */
+QLabel#about_menu_icon {
+	color: #797979;
+}
+
+/*!!! Table colors and more - Note: Affect tab bar !!!*/
+/*
+Now we hit the fun stuff...
+This controls main chat window and the windows of "Downloads, Uploads, Finished, Errors"
+
+
+Background-color: Controls the background color to the whole area
+alternate-background-color: The background color of every other item(every other person who chats)
+selection-background-color: ??? It looks like "QTableView::item:selected" does what this is suppose to do.
+ */
+QTableView {
+	background-color: #FFFFFF;
+	selection-background-color: #ceebf8;
+	alternate-background-color: #fcfcfc;
+	border: 1px solid #EDEDED;
+	border-top: 0;
+	padding: 0;
+	margin: 0;
+	outline: 0;
+}
+
+/*
+For formatting
+ */
+QTableView::pane, QTableView::item, QTableView::item:selected, QTableView::item:focus {
+	border: 0;
+}
+
+/*!!! Main table row selection !!!*/
+/*
+Can't seem to find what this tag does
+ */
+QTableView::item {
+	selection-color: #2F2C2D;
+}
+
+/*
+Changes the background when something is selected
+ */
+QTableView::item:selected {
+	background: #ceebf8;
+}
+
+/*
+Formatting
+ */
+QTableView::indicator {
+	width: 16px;
+	height: 16px;
+}
+
+/*!!! Chat box Editing !!!*/
+/*
+This will control the big text boxes.
+Ex. Options -> Router -> The "Salt" text box
+ */
+QTextEdit {
+	background: #FFFFFF;
+	border: 1px solid #EDEDED;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+}
+
+/*
+When you click on any of the ? and a box of text comes up
+ */
+QTextEdit#help {
+	background: #FFFFFF;
+	border: 0;
+}
+
+/*
+Controls the "tool bar" It is the box below the client tabs.
+It has the refresh logo, about menu, search bar, and hamburger menu in it
+Tip: Add background to color the background
+ */
+QToolBar {
+	height: 48px;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid #EDEDED;
+}
+
+/*
+I can't seem to find this one. Does not make a difference if you change the background color
+ */
+QToolBar::separator {
+	width: 4px;
+	border-left: 1px solid #EDEDED;
+	border-right: 1px solid #EDEDED;
+	border-bottom: 1px solid #EDEDED;
+	background: transparent;
+}
+
+/*
+The Space between the add new client button and the global settings button.
+ */
+QWidget#spacer {
+	background: #FFFFFF;
+	border-bottom: 1px solid #EDEDED;
+}
+
+/*!!! Search - Top !!!*/
+/*
+The same as the "QToolBar" tag in terms of background color (From what I can see)
+ */
+QToolBar#search_menu {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Any tool tip (when you hover over an icon or button and help comes up)
+ */
+QToolTip {
+	color: #000000;
+	border: 1px solid #EDEDED;
+	background-color: #FFFFFF;
+}
+
+/*!!! Tree view border!!!*/
+/*
+Same as the "QTableView" tag but for Browse, Search, and Users. NOT chat!
+ */
+QTreeView {
+	selection-background-color: #ceebf8;
+	alternate-background-color: #FBFBFB;
+	background-color: #FFFFFF;
+	border: 1px solid #EDEDED;
+	border-top: 0;
+	padding: 0;
+	margin: 0;
+	outline: 0;
+}
+
+/*!!! Share Folder selection background !!!*/
+/*
+Tip if you add the background tag you can change the default background color for everything but the selected item
+ */
+QTreeView::item, QTreeView::item:selected, QTreeView::item:focus {
+	selection-color: #2F2C2D;
+	border: 0;
+	outline: 0;
+
+}
+
+/*
+Same weird thing where it does what "selection-background-color" from "QTreeView" should do
+ */
+QTreeView::item:selected {
+	background: #ceebf8;
+}
+
+QTreeView QTableCornerButton::section {
+	background-color: #EDEDED;
+	border: 0;
+}
+
+/*!!! About section !!!*/
+/*
+This controls the titan logo in the hamburger menu but background and color do nothing
+ */
+QPushButton#about {
+	image: url(:/logo_gray.png);
+	font-size: 15px;
+	background: transparent;
+	border: 0;
+	color: #797979;
+	padding-left: 2px;
+	padding-right: 1px;
+	padding-top: 7px;
+	padding-bottom: 6px;
+}
+
+/*
+Background does nothing
+ */
+QPushButton#about:hover {
+	image: url(:/logo_white.png);
+	background: #0C9BDC;
+}
+
+/*
+Background does nothing
+ */
+QPushButton#about:pressed {
+	image: url(:/logo_white.png);
+	background: #5D5E5E;
+}
+
+/*!!! Chat Input Box !!!*/
+/*
+Controls the Chat box. Even though it refres to error, it changes nothing for the error tab
+ */
+QPlainTextEdit#chat, QPlainTextEdit#error {
+	background: transparent;
+	selection-color: black;
+	selection-background-color: #ceebf8;
+	border-top: 0;
+	border-bottom: 1px solid #EDEDED;
+	border-left: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Controls your user name to the left of the chat box
+Tip: Color does nothing
+ */
+QPushButton#chat_button {
+	height: 18px;
+	background: transparent;
+	font-weight: bold;
+	border: 0;
+}
+
+/*
+Controls the user's name and emoji area
+ */
+QWidget#chat_button, QWidget#emoji {
+	background: transparent;
+	border: 0;
+	padding-right: 0;
+}
+
+/*!!! Emoji !!!*/
+/*
+Controls the emoji button
+ */
+QPushButton#emoji {
+	background: transparent;
+	border: 0;
+	color: #9D9C9C;
+	font-size: 20px;
+}
+
+/*
+When you hover over the emoji button
+ */
+QPushButton#emoji::hover {
+	color: #797979;
+}
+
+/*
+When the emoji button is pressed
+ */
+QPushButton#emoji::pressed, QPushButton#emoji::checked {
+	border: 0;
+}
+
+/*
+Controls the emoji categories (Face, Tiger, Apple, Football, Space ship, Gun, Heart)
+ */
+QPushButton#emoji_category, QPushButton#emoji_category_first {
+	border: 1px solid #EDEDED;
+	border-bottom: 0;
+	border-left: 0;
+	background: #F9F9F9;
+	font-size: 18px;
+	padding-bottom: 8px;
+}
+
+/*
+When you hover over any category of emoji
+ */
+QPushButton#emoji_category::hover, QPushButton#emoji_category_first::hover {
+	background: #EDEDED;
+}
+
+/*
+When an emoji category is currently selected
+ */
+QPushButton#emoji_category::checked, QPushButton#emoji_category_first::checked {
+	background: #D8D8D8;
+}
+
+/*
+Special formatting for the first category of emoji
+ */
+QPushButton#emoji_category_first {
+	border-left: 1px solid #EDEDED;
+}
+
+/*
+Does not seem to effect anything with the background tab.
+Use the "QPushButton#emoji_category, QPushButton#emoji_category_first" Tag if trying to change the background color
+ */
+QWidget#emoji_categories {
+	background: #F9F9F9;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Controls the background color of the whole emoji background (Where the actual emojis are at)
+ */
+QListWidget {
+	background: #F9F9F9;
+	border: 1px solid #EDEDED;
+	border-bottom: 0;
+}
+
+/*
+Controls each emoji individually
+Use the "QListWidget" tag to change the background color of the whole area
+ */
+QListWidget::item {
+	background: transparent;
+}
+
+/*!!! Your name left of chat input !!!*/
+/*
+Your user name left of chat when nothing is typed
+ */
+QPushButton#chat_button:disabled {
+	color: #C9C9C9;
+}
+
+/*
+Does nothing, is just a place holder for the app to change the color to what ever your user color is
+ */
+QPushButton#chat_button::hover {
+	color: #dc4d0c;
+}
+
+/*
+Same as ^ Just a place holder
+ */
+QPushButton#chat_button::pressed, QPushButton#chat_button::checked {
+	color: #0C9BDC;
+}
+
+/*!!! Menu bar - Clients - Chat, etc!!!*/
+/*
+Controls the Icons on the menu bars (The chat bubble, the Triangle in the error tab...)
+Tip: Background changes the color behind the icon but color changes the color of text for the menu bar (The chat, users, errors text)
+ */
+QLabel#menubar_icon, QLabel#menubar, QPushButton#menubar, QWidget#menubar {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	/*!!! Line under panes' icons + titles !!!*/
+	/*
+	What ^ says
+	 */
+	border-bottom: 2px solid #C9C9C9;
+}
+
+/*
+The font type of the text
+The color changes the color of the icons NOT the text. (Use the color tag in the "QLabel#menubar_icon, QLabel#menubar, QPushButton#menubar, QWidget#menubar " tag to do that)
+ */
+QLabel#menubar_icon {
+	color: #5D5E5E;
+	font-family: "FontAwesome";
+	padding-left: 4px;
+}
+
+/*
+Formatting
+Tip:Background does nothing
+ */
+QLabel#menubar {
+	padding-left: 0;
+	padding-right: 4px;
+}
+
+/*!!! Menu Bar Icons !!!*/
+/*
+Controls the color and formatting of the X button on all of the windows (Chat window, Users window, Downloads window)
+ */
+QPushButton#menubar {
+	height: 20px;
+	width: 22px;
+	background-color: transparent;
+	padding-right: 2px;
+	color: #5D5E5E;
+}
+
+/*
+Controls the main bar for the windows. Background changes the whole background
+Tip: For color themes also use "QLabel#menubar_icon " to change the icon in the menubar
+ */
+QWidget#menubar {
+	height: 24px;
+	padding-top: 2px;
+	background: #F9F9F9;
+}
+
+/*
+Controls the Hover color of the X in the "Menu Bar"
+ */
+QPushButton#menubar::hover {
+	color: #dc4d0c;
+}
+
+/*
+Controls the color of the X button when pressed
+ */
+QPushButton#menubar::pressed, QPushButton#menubar::checked {
+	color: #0C9BDC;
+}
+
+/*
+Never disabled so no need to change (although you can if you want)
+ */
+QPushButton#menubar:disabled {
+	color: #c0c0c0;
+}
+
+/*!!! Main !!!*/
+/*
+For Formatting
+ */
+QToolBar#main {
+	height: 48px;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+For formatting. Could not find the element after chaninging the background color
+ */
+QToolBar#main::separator {
+	width: 1px;
+	border: 0;
+	border-left: 1px solid #EDEDED;
+	margin-left: 4px;
+	margin-right: 3px;
+	background: transparent;
+}
+
+/*!!! Menu !!!*/
+/*
+Formatting only
+ */
+QToolBar#menu {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Can't seem to find it. Formatting only or it is layered behind objects
+ */
+QToolBar#menu::separator {
+	width: 1px;
+	border: 0;
+	border-left: 1px solid #EDEDED;
+	margin-left: 4px;
+	margin-right: 3px;
+	background: transparent;
+}
+
+/*!!! Pane !!!*/
+/*
+Can't seem to find the object
+ */
+QLabel#pane_icon, QLabel#pane, QPushButton#pane, QWidget#pane {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-bottom: 2px solid #0C9BDC;
+	border-top: 1px solid #EDEDED;
+}
+
+/*
+Can't seem to find the object
+ */
+QLabel#pane_icon {
+	padding-top: 4px;
+	color: #0C9BDC;
+}
+
+/*
+Formatting
+ */
+QLabel#pane {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+/*
+Also can not seem to find this object
+ */
+QPushButton#pane {
+	height: 20px;
+	width: 22px;
+	background-color: transparent;
+	color: #5D5E5E;
+}
+
+/*!!! Message Router Group Pane !!!*/
+/*
+Does not seem to be used. Dead
+ */
+QWidget#pane {
+	height: 24px;
+	background: #FFFFFF;
+	padding-top: 2px;
+}
+
+/*
+Does not seem to be used. Dead
+ */
+QPushButton#pane::hover {
+	color: #dc4d0c;
+}
+
+/*
+Dead or a place holder just like ^
+ */
+QPushButton#pane::pressed, QPushButton#pane::checked {
+	color: #0C9BDC;
+}
+
+/*
+Does not seem to be used
+"i dont have 8K but i can virtualize it on my mp3 player"-FAQX77
+ */
+QPushButton#pane:disabled {
+	color: #c0c0c0;
+}
+
+/*!!! Titlebar - Top Row settings, tabs !!!*/
+/*
+Doesn't seem to be in use/is not visible
+ */
+QPushButton#titlebar {
+	background-color: transparent;
+	color: #5D5E5E;
+	border: 0;
+	margin: 0;
+	padding: 4px;
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+/*
+Currently not in use or not visible
+ */
+QPushButton#titlebar::hover {
+	color: #dc4d0c;
+}
+
+/*
+Currently not in use or not visible
+ */
+QPushButton#titlebar::pressed, QPushButton#titlebar::checked {
+	color: #0C9BDC;
+}
+
+/*
+The add new client plus button and the global settings button
+ */
+QToolBar#titlebar {
+	background: #FFFFFF;
+	border-bottom: 1px solid #EDEDED;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Currently not in use or not visible
+ */
+QToolBar#titlebar::separator {
+	width: 1px;
+	border: 0;
+	border-left: 1px solid #EDEDED;
+	margin-left: 4px;
+	margin-right: 3px;
+	background: transparent;
+}
+
+/*!!! Status Bar !!!*/
+/*
+Color of the icons in the status bar (the icons on the very bottom)
+ */
+QLabel#status_image, QLabel#status_text {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	background: transparent;
+	color: #5D5E5E;
+}
+
+/*
+Does not seem to change anything unless you add color or background tags
+Color will change the color of the icons just like "QLabel#status_image, QLabel#status_text" but only the icons and not the text
+ */
+QLabel#status_image {
+	font-weight: bold;
+	border: 0;
+}
+
+/*
+Controls the Titan logo in the bottom left
+Tip: Adding color does nothing
+ */
+QPushButton#status_about {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+}
+
+/*!!! Client Options !!!*/
+/*
+Controls the option bar in Options
+Tip: Adding color does not change the color of the text
+ */
+QWidget#option_bar {
+	background: transparent;
+	border-top: 1px solid #E0E0E0;
+	border-bottom: 1px solid #E0E0E0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+Controls all of the ? marks in options and global settings
+ */
+QPushButton#option_help {
+	font-size: 18px;
+	color: #5D5E5E;
+}
+
+/*!!! Global Settings, Wizard !!!*/
+/*
+Does not change anything but a single box in the setup wizard
+I recommend leaving it to transparent
+ */
+QWidget#wizard, QWidget#global_settings {
+	background: transparent;
+}
+
+/*
+Does not seem to be in use. Dead
+ */
+QGroupBox#wizard {
+	font-weight: bold;
+	border: 0;
+	color: #5D5E5E;
+	margin-top: 18px;
+}
+
+/*
+Does not seem to be in use
+ */
+QGroupBox#global_settings {
+	font-size: 22px;
+	color: #797979;
+	margin-top: 32px;
+
+}
+
+/*
+Does not seem to be in use
+ */
+QCheckBox#wizard {
+	font-size: 12px;
+	background-color: transparent;
+	color: #5D5E5E;
+}
+
+/*
+Controls the big text saying "Titan" in global settings and in the set up wizard
+I suggest leaving the background-color to transparent
+Tip: Color does nothing.
+ */
+QLabel#wizard_image {
+	font-size: 14px;
+	background-color: transparent;
+	color: #5D5E5E;
+}
+
+/*
+Controls the text in the set up wizard and only that text
+ */
+QLabel#wizard_info {
+	font-style: italic;
+	background-color: transparent;
+	color: #5D5E5E;
+}
+
+/*
+Background and color do nothing. These are not used or just place holders and over written by the app
+ */
+QPushButton#wizard {
+	font-weight: bold;
+	font-size: 28px;
+	background-color: transparent;
+	color: #00D087;
+}
+
+/*
+Also not in use/place holders
+ */
+QPushButton#wizard:hover, QPushButton#wizard:focus {
+	background-color: #EDEDED;
+}
+
+/*
+Also not in use/place holder
+ */
+QPushButton#wizard:checked, QPushButton#wizard:pressed {
+	background-color: #ceebf8;
+}
+
+/*
+Also not in use/place holder
+ */
+QStackedWidget#wizard {
+	background-color: #FFFFFF;
+}
+
+/*
+Thats it. Before you ship out your theme make sure to get others to look at it and you can get some program or ide to delete all the comments in order to
+make your theme a smaller size. There are around 700 lines of comments in this CSS file.
+ */

@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HTTP client &#8212; cpp-netlib v0.13.0</title>
+    
+    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Simple wget" href="simple_wget.html" />
+    <link rel="prev" title="Examples" href="../../examples.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body role="document">
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="simple_wget.html" title="Simple wget"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../../examples.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">cpp-netlib v0.13.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../examples.html" accesskey="U">Examples</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="http-client">
+<span id="id1"></span><h1>HTTP client<a class="headerlink" href="#http-client" title="Permalink to this headline">¶</a></h1>
+<p>The first code example is the simplest thing you can do with the
+<code class="xref py py-mod docutils literal"><span class="pre">cpp-netlib</span></code>.  The application is a simple HTTP client, which can
+be found in the subdirectory <code class="docutils literal"><span class="pre">libs/network/example/http_client.cpp</span></code>.
+All this example doing is creating and sending an HTTP request to a server
+and printing the response body.</p>
+<div class="section" id="the-code">
+<h2>The code<a class="headerlink" href="#the-code" title="Permalink to this headline">¶</a></h2>
+<p>Without further ado, the code to do this is as follows:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;boost/network/protocol/http/client.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="o">::</span><span class="n">network</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Usage: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; [url]&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">http</span><span class="o">::</span><span class="n">client</span> <span class="n">client</span><span class="p">;</span>
+    <span class="n">http</span><span class="o">::</span><span class="n">client</span><span class="o">::</span><span class="n">request</span> <span class="n">request</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">request</span> <span class="o">&lt;&lt;</span> <span class="n">header</span><span class="p">(</span><span class="s">&quot;Connection&quot;</span><span class="p">,</span> <span class="s">&quot;close&quot;</span><span class="p">);</span>
+    <span class="n">http</span><span class="o">::</span><span class="n">client</span><span class="o">::</span><span class="n">response</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">body</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-example">
+<h2>Running the example<a class="headerlink" href="#running-the-example" title="Permalink to this headline">¶</a></h2>
+<p>You can then run this to get the <a class="reference external" href="http://www.boost.org/">Boost</a> website:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/cpp-netlib-build
+$ make http_client
+$ ./example/http_client http://www.boost.org/
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The instructions for all these examples assume that
+<code class="xref py py-mod docutils literal"><span class="pre">cpp-netlib</span></code> is build outside the source tree,
+according to <a class="reference external" href="http://www.cmake.org/Wiki/CMake_FAQ#What_is_an_.22out-of-source.22_build.3F">CMake conventions</a>.  For the sake of
+consistency we assume that this is in the
+<code class="docutils literal"><span class="pre">~/cpp-netlib-build</span></code> directory.</p>
+</div>
+</div>
+<div class="section" id="diving-into-the-code">
+<h2>Diving into the code<a class="headerlink" href="#diving-into-the-code" title="Permalink to this headline">¶</a></h2>
+<p>Since this is the first example, each line will be presented and
+explained in detail.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;boost/network/protocol/http/client.hpp&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>All the code needed for the HTTP client resides in this header.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">http</span><span class="o">::</span><span class="n">client</span> <span class="n">client</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>First we create a <code class="docutils literal"><span class="pre">client</span></code> object.  The <code class="docutils literal"><span class="pre">client</span></code> abstracts all the
+connection and protocol logic.  The default HTTP client is version
+1.1, as specified in <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616.html">RFC 2616</a>.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">http</span><span class="o">::</span><span class="n">client</span><span class="o">::</span><span class="n">request</span> <span class="n">request</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</pre></div>
+</div>
+<p>Next, we create a <code class="docutils literal"><span class="pre">request</span></code> object, with a URI string passed as a
+constructor argument.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">request</span> <span class="o">&lt;&lt;</span> <span class="n">header</span><span class="p">(</span><span class="s">&quot;Connection&quot;</span><span class="p">,</span> <span class="s">&quot;close&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="xref py py-mod docutils literal"><span class="pre">cpp-netlib</span></code> makes use of stream syntax and <em>directives</em> to allow
+developers to build complex message structures with greater
+flexibility and clarity.  Here, we add the HTTP header &#8220;Connection:
+close&#8221; to the request in order to signal that the connection will be
+closed after the request has completed.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">http</span><span class="o">::</span><span class="n">client</span><span class="o">::</span><span class="n">response</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Once we&#8217;ve built the request, we then make an HTTP GET request
+throught the <code class="docutils literal"><span class="pre">http::client</span></code> from which an <code class="docutils literal"><span class="pre">http::response</span></code> is
+returned.  <code class="docutils literal"><span class="pre">http::client</span></code> supports all common HTTP methods: GET,
+POST, HEAD, DELETE.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">body</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Finally, though we don&#8217;t do any error checking, the response body is
+printed to the console using the <code class="docutils literal"><span class="pre">body</span></code> directive.</p>
+<p>That&#8217;s all there is to the HTTP client.  In fact, it&#8217;s possible to
+compress this to a single line:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">body</span><span class="p">(</span><span class="n">http</span><span class="o">::</span><span class="n">client</span><span class="p">().</span><span class="n">get</span><span class="p">(</span><span class="n">http</span><span class="o">::</span><span class="n">request</span><span class="p">(</span><span class="s">&quot;http://www.boost.org/&quot;</span><span class="p">)));</span>
+</pre></div>
+</div>
+<p>The next example will introduce the <code class="docutils literal"><span class="pre">uri</span></code> class.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HTTP client</a><ul>
+<li><a class="reference internal" href="#the-code">The code</a></li>
+<li><a class="reference internal" href="#running-the-example">Running the example</a></li>
+<li><a class="reference internal" href="#diving-into-the-code">Diving into the code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../../examples.html"
+                        title="previous chapter">Examples</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simple_wget.html"
+                        title="next chapter">Simple <cite>wget</cite></a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="simple_wget.html" title="Simple wget"
+             >next</a></li>
+        <li class="right" >
+          <a href="../../examples.html" title="Examples"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../contents.html">cpp-netlib v0.13.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../examples.html" >Examples</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2008-2014, Glyn Matthews, Dean Michael Berris; 2013 Google, Inc..
+      Last updated on Nov 09, 2017.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

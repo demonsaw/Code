@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HTTP Server API &#8212; cpp-netlib v0.13.0</title>
+    
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../references.html" />
+    <link rel="prev" title="HTTP Response" href="http_response.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body role="document">
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../references.html" title="References"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="http_response.html" title="HTTP Response"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">cpp-netlib v0.13.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../reference.html" accesskey="U">Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="http-server-api">
+<h1>HTTP Server API<a class="headerlink" href="#http-server-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref py py-mod docutils literal"><span class="pre">cpp-netlib</span></code> includes and implements and asynchronous HTTP server
+implementation that you can use and embed in your own applications. The HTTP
+Server implementation:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Cannot be copied.</strong> This means you may have to store instances of the HTTP
+Server in dynamic memory if you intend to use them as function parameters or
+pass them around in smart pointers of by reference.</li>
+<li><strong>Assume that requests made are independent of each other.</strong> None of the
+HTTP Server implementations support request pipelining (yet) so a single
+connection only deals with a single request.</li>
+<li><strong>The Handler instance is invoked asynchronously</strong>. This means the I/O
+thread used to handle network-related events are free to handle only the
+I/O related events. This enables the server to scale better as to the
+number of concurrent connections it can handle.</li>
+<li><strong>The Handler is able to schedule asynchronous actions on the thread pool
+associated with the server.</strong> This allows handlers to perform multiple
+asynchronous computations that later on perform writes to the connection.</li>
+<li><strong>The Handler is able to control the (asynchronous) writes to and reads
+from the HTTP connection.</strong> Because the connection is available to the
+Handler, that means it can write out chunks of data at a time or stream
+data through the connection continuously.</li>
+</ul>
+</div></blockquote>
+<p>The Handler concept for the HTTP Server is described by the following table:</p>
+<hr class="docutils" />
+<p><strong>Legend:</strong></p>
+<dl class="docutils">
+<dt>H</dt>
+<dd>The Handler type.</dd>
+<dt>h</dt>
+<dd>An instance of H.</dd>
+<dt>Req</dt>
+<dd>A type that models the Request Concept.</dd>
+<dt>ConnectionPtr</dt>
+<dd>A type that models the Connection Pointer Concept.</dd>
+<dt>req</dt>
+<dd>An instance of Req.</dd>
+<dt>conn</dt>
+<dd>An instance of ConncetionPtr.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="17%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Construct</th>
+<th class="head">Return Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h(req,</span> <span class="pre">conn)</span></code></td>
+<td><code class="docutils literal"><span class="pre">void</span></code></td>
+<td>Handle the request; conn is a shared
+pointer which exposes functions for
+writing to and reading from the connection.</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<p>The HTTP Server is meant to allow for better scalability in terms of the number
+of concurrent connections and for performing asynchronous actions within the
+handlers.  The HTTP Server implementation is available from a single
+user-facing template named <code class="docutils literal"><span class="pre">server</span></code>. This template takes in a single template
+parameter which is the type of the Handler to be called once a request has been
+parsed from a connection.</p>
+<p>An instance of Handler is taken as a reference to the constructor of the server
+instance.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The HTTP Server implementation does not perform any
+synchronization on the calls to the Handler invocation. This means if your
+handler contains or maintains internal state, you are responsible for
+implementing your own synchronization on accesses to the internal state of
+the Handler.</p>
+</div>
+<p>The general pattern for using the <code class="docutils literal"><span class="pre">server</span></code> template is shown below:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">handler</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">http</span><span class="o">::</span><span class="n">server</span><span class="o">&lt;</span><span class="n">handler</span><span class="o">&gt;</span> <span class="n">http_server</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">handler</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span>
+        <span class="n">http_server</span><span class="o">::</span><span class="n">request</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">req</span><span class="p">,</span>
+        <span class="n">http_server</span><span class="o">::</span><span class="n">connection_ptr</span> <span class="n">connection</span>
+    <span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle the request here, and use the connection to</span>
+        <span class="c1">// either read more data or write data out to the client</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-documentation">
+<h2>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The following sections assume that the following file has been included:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;boost/network/include/http/server.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;boost/network/utils/thread_pool.hpp&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>And that the following typedef&#8217;s have been put in place:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">handler_type</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">http</span><span class="o">::</span><span class="n">server</span><span class="o">&lt;</span><span class="n">handler_type</span><span class="o">&gt;</span> <span class="n">http_server</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">handler_type</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">http_server</span><span class="o">::</span><span class="n">request</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">request</span><span class="p">,</span>
+                    <span class="n">http_server</span><span class="o">::</span><span class="n">connection_ptr</span> <span class="n">connection</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// do something here</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<div class="section" id="constructor">
+<h3>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">explicit</span> <span class="pre">http_server(options)</span></code></dt>
+<dd>Construct an HTTP server instance passing in a <code class="docutils literal"><span class="pre">server_options&lt;Tag,</span>
+<span class="pre">Handler&gt;</span></code> instance.</dd>
+</dl>
+</div>
+<div class="section" id="server-options">
+<h3>Server Options<a class="headerlink" href="#server-options" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt>
+<span class="target" id="structboost_1_1network_1_1http_1_1server__options"></span><em class="property">template </em>&lt;class <em>Tag</em>, class <em>Handler</em>&gt;</dt>
+<dt id="_CPPv2N5boost7network4http14server_optionsE">
+<span id="boost::network::http::server_options"></span><em class="property">struct </em><code class="descclassname">boost::network::http::</code><code class="descname">server_options</code><a class="headerlink" href="#_CPPv2N5boost7network4http14server_optionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The options supported by an HTTP Server&#8217;s constructor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14server_optionsER7Handler">
+<span id="boost::network::http::server_options::server_options__HandlerR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1abf9af18765187285cc6bde1337d5f8b3"></span><code class="descname">server_options</code><span class="sig-paren">(</span>Handler &amp;<em>handler</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14server_optionsER7Handler" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A single-argument constructor that takes a Handler, and sets all options to defaults. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14server_optionsEv">
+<span id="boost::network::http::server_options::server_options"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a12d3f97e677f5976756f4b433fb32eb2"></span><code class="descname">server_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14server_optionsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Disabled default constructor for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14server_optionsERK14server_options">
+<span id="boost::network::http::server_options::server_options__server_optionsCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1ab069a731d77d61983ca5ad4ece7013d7"></span><code class="descname">server_options</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5boost7network4http14server_options14server_optionsER7Handler" title="boost::network::http::server_options::server_options">server_options</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14server_optionsERK14server_options" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_optionsaSERK14server_options">
+<span id="boost::network::http::server_options::assign-operator__server_optionsCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1aa71091762f0383f71aa7904d65165542"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a>&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_optionsaSERK14server_options" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14server_optionsERR14server_options">
+<span id="boost::network::http::server_options::server_options__server_optionsRR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1aaa73f2c3bfd7541f4a89c9eb3be0f13b"></span><code class="descname">server_options</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_options14server_optionsER7Handler" title="boost::network::http::server_options::server_options">server_options</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14server_optionsERR14server_options" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move constructor for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_optionsaSERR14server_options">
+<span id="boost::network::http::server_options::assign-operator__server_optionsRR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a0fcba71831c2a2bcdf6337534abe9afd"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a>&amp;&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_optionsaSERR14server_options" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Move assignment for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_optionsD0Ev">
+<span id="boost::network::http::server_options::~server_options"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a20ee60d6d7468be2e49b184984a39f15"></span><code class="descname">~server_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_optionsD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destructor for the options class. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options7contextENSt10shared_ptrI11ssl_contextEE">
+<span id="boost::network::http::server_options::context__std::shared_ptr:ssl_context:"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1afc6ec13db274b337a7067bb657c10a8f"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">context</code><span class="sig-paren">(</span>std::shared_ptr&lt;ssl_context&gt; <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options7contextENSt10shared_ptrI11ssl_contextEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the SSL context for the server. Default is nullptr. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options10io_serviceENSt10shared_ptrIN5boost4asio10io_serviceEEE">
+<span id="boost::network::http::server_options::io_service__std::shared_ptr:boost::asio::io_service:"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a8d0eaef76c8d55ee3a8f3a923fce90c5"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">io_service</code><span class="sig-paren">(</span>std::shared_ptr&lt;boost::asio::io_service&gt; <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options10io_serviceENSt10shared_ptrIN5boost4asio10io_serviceEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provides an Asio io_service for the server. Default is nullptr. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options7addressE11string_type">
+<span id="boost::network::http::server_options::address__string_type"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a19ad2b3bebc165f268e6ad9273096e53"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">address</code><span class="sig-paren">(</span>string_type <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options7addressE11string_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the address to listen to for the server. Default is localhost. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options4portER11string_type">
+<span id="boost::network::http::server_options::port__string_typeCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a013f7f63ae3497a4d644cb28cfd8be96"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">port</code><span class="sig-paren">(</span>string_type <em class="property">const</em> &amp;<em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options4portER11string_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the port to listen to for the server. Default is 80. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options15protocol_familyE17protocol_family_t">
+<span id="boost::network::http::server_options::protocol_family__protocol_family_t"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a79242a1ff4c64cbb69aad83d8fcf6c15"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">protocol_family</code><span class="sig-paren">(</span>protocol_family_t <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options15protocol_familyE17protocol_family_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the protocol family for address resolving. Default is AF_UNSPEC. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options13reuse_addressEb">
+<span id="boost::network::http::server_options::reuse_address__b"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a5420b1d37c24e15d688555e370d41e10"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">reuse_address</code><span class="sig-paren">(</span>bool <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options13reuse_addressEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set whether to reuse the address (SO_REUSE_ADDR). Default is false. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14report_abortedEb">
+<span id="boost::network::http::server_options::report_aborted__b"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1aa556226ef13f57eba098e28031201070"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">report_aborted</code><span class="sig-paren">(</span>bool <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14report_abortedEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set whether to report aborted connections. Default is false. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options15non_blocking_ioEb">
+<span id="boost::network::http::server_options::non_blocking_io__b"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1acb8fe8f75308f5aff44243f8a50d8764"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">non_blocking_io</code><span class="sig-paren">(</span>bool <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options15non_blocking_ioEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set whether to use non-blocking IO. Default is true. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options6lingerEb">
+<span id="boost::network::http::server_options::linger__b"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a40e9a857b04b10237164cf71b6c15b73"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">linger</code><span class="sig-paren">(</span>bool <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options6lingerEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set whether sockets linger (SO_LINGER). Default is true. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options14linger_timeoutE6size_t">
+<span id="boost::network::http::server_options::linger_timeout__s"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a108484ab86498c54173887b32861cf7f"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">linger_timeout</code><span class="sig-paren">(</span>size_t <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options14linger_timeoutE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the linger timeout. Default is 0. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options19receive_buffer_sizeEN5boost4asio11socket_base19receive_buffer_sizeE">
+<span id="boost::network::http::server_options::receive_buffer_size__boost::asio::socket_base::receive_buffer_size"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a9ee3460b3d2c64eee7929c5272e4b5ff"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">receive_buffer_size</code><span class="sig-paren">(</span>boost::asio::socket_base::receive_buffer_size <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options19receive_buffer_sizeEN5boost4asio11socket_base19receive_buffer_sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the socket receive buffer size. Unset by default. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options16send_buffer_sizeEN5boost4asio11socket_base16send_buffer_sizeE">
+<span id="boost::network::http::server_options::send_buffer_size__boost::asio::socket_base::send_buffer_size"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a71ee06e5148e94b4f543f0ebf3356053"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">send_buffer_size</code><span class="sig-paren">(</span>boost::asio::socket_base::send_buffer_size <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options16send_buffer_sizeEN5boost4asio11socket_base16send_buffer_sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the send buffer size. Unset by default. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options21receive_low_watermarkEN5boost4asio11socket_base21receive_low_watermarkE">
+<span id="boost::network::http::server_options::receive_low_watermark__boost::asio::socket_base::receive_low_watermark"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1ac243389145fe5bd57a717805ae62f0ef"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">receive_low_watermark</code><span class="sig-paren">(</span>boost::asio::socket_base::receive_low_watermark <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options21receive_low_watermarkEN5boost4asio11socket_base21receive_low_watermarkE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the socket receive low watermark. Unset by default. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options18send_low_watermarkEN5boost4asio11socket_base18send_low_watermarkE">
+<span id="boost::network::http::server_options::send_low_watermark__boost::asio::socket_base::send_low_watermark"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a3892a846b629fef3524b1841a82ae1f4"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">send_low_watermark</code><span class="sig-paren">(</span>boost::asio::socket_base::send_low_watermark <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options18send_low_watermarkEN5boost4asio11socket_base18send_low_watermarkE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the socket send low watermark. Unset by default. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options11thread_poolENSt10shared_ptrIN5utils11thread_poolEEE">
+<span id="boost::network::http::server_options::thread_pool__std::shared_ptr:utils::thread_pool:"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a228ccc0a29ad4ae785119f75682e6ed0"></span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<code class="descname">thread_pool</code><span class="sig-paren">(</span>std::shared_ptr&lt;utils::thread_pool&gt; <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options11thread_poolENSt10shared_ptrIN5utils11thread_poolEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the thread-pool to use. Default is nullptr. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options10io_serviceEv">
+<span id="boost::network::http::server_options::io_serviceC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a493c2ef01c8d715bd5a73b1b4f128775"></span>std::shared_ptr&lt;boost::asio::io_service&gt; <code class="descname">io_service</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options10io_serviceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the provided Asio io_service. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options7addressEv">
+<span id="boost::network::http::server_options::addressC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a48b813a132832db7594865bbf1082b36"></span>string_type <code class="descname">address</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options7addressEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the address to listen on. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options4portEv">
+<span id="boost::network::http::server_options::portC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a4539881b57bb7c0bc4fb826754057061"></span>string_type <code class="descname">port</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options4portEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the port to listen on. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options15protocol_familyEv">
+<span id="boost::network::http::server_options::protocol_familyC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1ad6acc5772db7af6b80ef3d4d5eabd48c"></span>protocol_family_t <code class="descname">protocol_family</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options15protocol_familyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the protocol family used for address resolving. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options7handlerEv">
+<span id="boost::network::http::server_options::handlerC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a174399d618d6279de84b516bd7da6751"></span>Handler &amp;<code class="descname">handler</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options7handlerEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to the provided handler. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options13reuse_addressEv">
+<span id="boost::network::http::server_options::reuse_addressC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a9b9dfb07c48309c69e957dab5cac35e7"></span>bool <code class="descname">reuse_address</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options13reuse_addressEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether to reuse the address. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options14report_abortedEv">
+<span id="boost::network::http::server_options::report_abortedC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a8b48d69277dfc7c365834d425ab827cd"></span>bool <code class="descname">report_aborted</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options14report_abortedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether to report aborted connections. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options15non_blocking_ioEv">
+<span id="boost::network::http::server_options::non_blocking_ioC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1ad790ac105043863ae202c9fb864a27a0"></span>bool <code class="descname">non_blocking_io</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options15non_blocking_ioEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether to perform non-blocking IO. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options6lingerEv">
+<span id="boost::network::http::server_options::lingerC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1acc0e7d3078eb175e2881b61bef212ab5"></span>bool <code class="descname">linger</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options6lingerEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether to linger. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options14linger_timeoutEv">
+<span id="boost::network::http::server_options::linger_timeoutC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1aa9d286644e6fcc7dc26f2f0fb7c0ec2a"></span>size_t <code class="descname">linger_timeout</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options14linger_timeoutEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the linger timeout. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options19receive_buffer_sizeEv">
+<span id="boost::network::http::server_options::receive_buffer_sizeC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1afa00b23c2f6719eebd7245404516d38d"></span>boost::optional&lt;boost::asio::socket_base::receive_buffer_size&gt; <code class="descname">receive_buffer_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options19receive_buffer_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the optional receive buffer size. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options16send_buffer_sizeEv">
+<span id="boost::network::http::server_options::send_buffer_sizeC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a604d8dccc28fb05741bb7487de2030c0"></span>boost::optional&lt;boost::asio::socket_base::send_buffer_size&gt; <code class="descname">send_buffer_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options16send_buffer_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the optional send buffer size. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options21receive_low_watermarkEv">
+<span id="boost::network::http::server_options::receive_low_watermarkC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1af70d24ab7953346661305bf627445b95"></span>boost::optional&lt;boost::asio::socket_base::receive_low_watermark&gt; <code class="descname">receive_low_watermark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options21receive_low_watermarkEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the optional receive low watermark. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options18send_low_watermarkEv">
+<span id="boost::network::http::server_options::send_low_watermarkC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1aa0579ec2451414785f46cede879531bb"></span>boost::optional&lt;boost::asio::socket_base::send_low_watermark&gt; <code class="descname">send_low_watermark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options18send_low_watermarkEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the optional send low watermark. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options11thread_poolEv">
+<span id="boost::network::http::server_options::thread_poolC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1ad7e32b6647f741d947340f4020b07bb2"></span>std::shared_ptr&lt;utils::thread_pool&gt; <code class="descname">thread_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options11thread_poolEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a pointer to the provided thread pool. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http14server_options7contextEv">
+<span id="boost::network::http::server_options::contextC"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a2716eac5c9ded4696bed39bb4e650e40"></span>std::shared_ptr&lt;ssl_context&gt; <code class="descname">context</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http14server_options7contextEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a pointer to the provided context. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http14server_options4swapER14server_options">
+<span id="boost::network::http::server_options::swap__server_optionsR"></span><span class="target" id="structboost_1_1network_1_1http_1_1server__options_1a194e0cc3d88ffd2bebc843aa4003db3b"></span>void <code class="descname">swap</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http14server_options4swapER14server_options" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Swap implementation for the server options. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="public-members">
+<h3>Public Members<a class="headerlink" href="#public-members" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt>
+<span class="target" id="structboost_1_1network_1_1http_1_1server"></span><em class="property">template </em>&lt;<em class="property">class</em> Handler&gt;</dt>
+<dt id="_CPPv2N5boost7network4http6serverE">
+<span id="boost::network::http::server"></span><em class="property">struct </em><code class="descclassname">boost::network::http::</code><code class="descname">server</code><a class="headerlink" href="#_CPPv2N5boost7network4http6serverE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The main HTTP Server template implementing an asynchronous HTTP service.</p>
+<p>Usage Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">handler_type</span> <span class="n">handler</span><span class="p">;</span>
+<span class="n">http_server</span><span class="p">::</span><span class="n">options</span> <span class="n">options</span><span class="p">(</span><span class="n">handler</span><span class="p">);</span>
+<span class="n">options</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">(</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">boost</span><span class="p">::</span><span class="n">network</span><span class="p">::</span><span class="n">utils</span><span class="p">::</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="p">());</span>
+<span class="n">http_server</span> <span class="n">server</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">address</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">port</span><span class="p">(</span><span class="s2">&quot;8000&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+ </p>
+<p>Inherits from boost::network::http::async_server_base&lt; tags::http_server, Handler &gt;</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http6server11server_baseE">
+<span id="boost::network::http::server::server_base"></span><span class="target" id="structboost_1_1network_1_1http_1_1server_1a4e5f2b1783c4e797d7aacffdc9126770"></span><em class="property">typedef </em>async_server_base&lt;tags::http_server, Handler&gt; <code class="descname">server_base</code><a class="headerlink" href="#_CPPv2N5boost7network4http6server11server_baseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A convenience typedef for the base of this type, implementing most of the internal details. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http6server7optionsE">
+<span id="boost::network::http::server::options"></span><span class="target" id="structboost_1_1network_1_1http_1_1server_1aa7880be8e651d6af16efaff526f37ac7"></span><em class="property">typedef </em><a class="reference internal" href="#_CPPv2N5boost7network4http14server_optionsE" title="boost::network::http::server_options">server_options</a>&lt;tags::http_server, Handler&gt; <code class="descname">options</code><a class="headerlink" href="#_CPPv2N5boost7network4http6server7optionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The options supported by the server. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http17async_server_base7requestE">
+<span id="boost::network::http::async_server_base::request"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1aa1bd7e517b6fcbb07e39c5260b90131d"></span><em class="property">typedef </em>basic_request&lt;tags::http_server&gt; <code class="descname">request</code><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base7requestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The request type for this server. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http17async_server_base11string_typeE">
+<span id="boost::network::http::async_server_base::string_type"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1a0a882e6c5e76a26efc950c894ef2c145"></span><em class="property">typedef </em>string&lt;tags::http_server&gt;::type <code class="descname">string_type</code><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base11string_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http17async_server_base15response_headerE">
+<span id="boost::network::http::async_server_base::response_header"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1a6e17d4d32a618f4849e85ff1caa8e7c4"></span><em class="property">typedef </em>boost::network::http::response_header&lt;tags::http_server&gt;::type <code class="descname">response_header</code><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base15response_headerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The header type for this server. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http17async_server_base10connectionE">
+<span id="boost::network::http::async_server_base::connection"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1adb74643848806fae5e8940a300cf1143"></span><em class="property">typedef </em><a class="reference internal" href="#_CPPv2N5boost7network4http16async_connectionE" title="boost::network::http::async_connection">async_connection</a>&lt;tags::http_server, Handler&gt; <code class="descname">connection</code><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base10connectionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The connection type for this server. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http17async_server_base14connection_ptrE">
+<span id="boost::network::http::async_server_base::connection_ptr"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1aa5d60a85c8e7c6e0efd07a8b6aba8ed1"></span><em class="property">typedef </em>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv2N5boost7network4http17async_server_base10connectionE" title="boost::network::http::async_server_base::connection">connection</a>&gt; <code class="descname">connection_ptr</code><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base14connection_ptrE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defines the type for the connection pointer. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http17async_server_base3runEv">
+<span id="boost::network::http::async_server_base::run"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1a563d465032ede2e194f6647be88c5ffb"></span>void <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base3runEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Listens to the correct port and runs the server&#8217;s event loop. This can be run on multiple threads, as in the example below:</p>
+<p>Example: handler_type handler; http_server::options options(handler); options.thread_pool( std::make_shared&lt;boost::network::utils::thread_pool&gt;()); http_server server(options.address(&#8220;localhost&#8221;).port(&#8220;8000&#8221;));</p>
+<p>// Run in three threads including the current thread. std::thread t1([&amp;server] { server.run() }); std::thread t2([&amp;server] { server.run() }); server.run(); t1.join(); t2.join(); </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http17async_server_base4stopEv">
+<span id="boost::network::http::async_server_base::stop"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1a4b88de42b3096338a92e2e0c55c6dea0"></span>void <code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base4stopEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Stops the HTTP server acceptor and waits for all pending request handlers to finish. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http17async_server_base6listenEv">
+<span id="boost::network::http::async_server_base::listen"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1a4a4ff11175f853eaecf9fd901e85f901"></span>void <code class="descname">listen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http17async_server_base6listenEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Explicitly listens on the configured host and port. May be called multiple times but only takes effect once. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http17async_server_base7addressEv">
+<span id="boost::network::http::async_server_base::addressC"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1ab8d7662934e40350ba14c552e108e530"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5boost7network4http17async_server_base11string_typeE" title="boost::network::http::async_server_base::string_type">string_type</a> &amp;<code class="descname">address</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http17async_server_base7addressEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the server socket address, either IPv4 or IPv6 depending on options.protocol_family() </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK5boost7network4http17async_server_base4portEv">
+<span id="boost::network::http::async_server_base::portC"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__server__base_1ad6b4a7c503e06c7f5e6ecafcbd6ac982"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv2N5boost7network4http17async_server_base11string_typeE" title="boost::network::http::async_server_base::string_type">string_type</a> &amp;<code class="descname">port</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK5boost7network4http17async_server_base4portEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the server socket port. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="connection-object">
+<h3>Connection Object<a class="headerlink" href="#connection-object" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt>
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection"></span><em class="property">template </em>&lt;<em class="property">class</em> Tag, <em class="property">class</em> Handler&gt;</dt>
+<dt id="_CPPv2N5boost7network4http16async_connectionE">
+<span id="boost::network::http::async_connection"></span><em class="property">struct </em><code class="descclassname">boost::network::http::</code><code class="descname">async_connection</code><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connectionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inherits from std::enable_shared_from_this&lt; async_connection&lt; Tag, Handler &gt; &gt;</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http16async_connection8status_tE">
+<span id="boost::network::http::async_connection::status_t"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3ed"></span><em class="property">enum </em><code class="descname">status_t</code><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection8status_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The set of known status codes for HTTP server responses. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection2okE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda1083caceea420870157c5aee09d412fa"></span><code class="descname">ok</code> = 200<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection2okE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection7createdE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda854de7b51c1ac8a15b4f66a01c82363f"></span><code class="descname">created</code> = 201<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection7createdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection8acceptedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edaaed5c0ab063ea8e8f79e4c8cd3cfac70"></span><code class="descname">accepted</code> = 202<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection8acceptedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection10no_contentE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda98dda05b7f976355d2fceb0de289bb29"></span><code class="descname">no_content</code> = 204<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection10no_contentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection15partial_contentE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edaa8ed180697c0aadbec91ad8fd34823a4"></span><code class="descname">partial_content</code> = 206<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection15partial_contentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection16multiple_choicesE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda557eeb830f2f03deb38dd0e446d6c247"></span><code class="descname">multiple_choices</code> = 300<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection16multiple_choicesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection17moved_permanentlyE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edacfa18818dbf6414fa92b8c9ad7d5a278"></span><code class="descname">moved_permanently</code> = 301<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection17moved_permanentlyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection17moved_temporarilyE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda2f4addabfe0b4b44a5d687a3363398b5"></span><code class="descname">moved_temporarily</code> = 302<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection17moved_temporarilyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection12not_modifiedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edabf55ac10b68ef5229bc51c52b805a460"></span><code class="descname">not_modified</code> = 304<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection12not_modifiedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection11bad_requestE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda3e550baf02168f757e8f5fe45960313b"></span><code class="descname">bad_request</code> = 400<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection11bad_requestE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection12unauthorizedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edae44b8427a3c71d5689550b69f4fb9721"></span><code class="descname">unauthorized</code> = 401<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection12unauthorizedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection9forbiddenE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda991d134964473e55b793004bab665950"></span><code class="descname">forbidden</code> = 403<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection9forbiddenE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection9not_foundE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edae265ff1108dccaca109c7639ac668651"></span><code class="descname">not_found</code> = 404<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection9not_foundE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection13not_supportedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda83ca89d8e6813c3bf6eedf14b5b92505"></span><code class="descname">not_supported</code> = 405<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection13not_supportedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection14not_acceptableE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda00d37c53db64e07c5ae2de0d360aa929"></span><code class="descname">not_acceptable</code> = 406<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection14not_acceptableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection15request_timeoutE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edacf91665a06c9b6158808d9c8fb9191d5"></span><code class="descname">request_timeout</code> = 408<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection15request_timeoutE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection19precondition_failedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda4256dbcb6dbba5e307c59ce608643cea"></span><code class="descname">precondition_failed</code> = 412<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection19precondition_failedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection19unsatisfiable_rangeE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda34603321665cccdbe65a09625a3aac8a"></span><code class="descname">unsatisfiable_range</code> = 416<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection19unsatisfiable_rangeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection21internal_server_errorE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda9c474588f7b987c762fcac64a9506a76"></span><code class="descname">internal_server_error</code> = 500<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection21internal_server_errorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection15not_implementedE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3edaffdf2a669971c41b6cd2400f16360e8d"></span><code class="descname">not_implemented</code> = 501<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection15not_implementedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection11bad_gatewayE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda0c538d7c0b5a79c3e0fe28c33409c316"></span><code class="descname">bad_gateway</code> = 502<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection11bad_gatewayE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection19service_unavailableE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda98feb6aef7d9d1096c9af9d36e15e8c7"></span><code class="descname">service_unavailable</code> = 503<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection19service_unavailableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv2N5boost7network4http16async_connection17space_unavailableE">
+<span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a6e0311ff1c74e9b3d0278738a721e3eda13fe0d3cb21095cbe6d27ae1792f182d"></span><code class="descname">space_unavailable</code> = 507<a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection17space_unavailableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http16async_connection14connection_ptrE">
+<span id="boost::network::http::async_connection::connection_ptr"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1ac70117f7bd7af5d07abddf29863ad84c"></span><em class="property">typedef </em>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv2N5boost7network4http16async_connectionE" title="boost::network::http::async_connection">async_connection</a>&gt; <code class="descname">connection_ptr</code><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection14connection_ptrE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The connection pointer type. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http16async_connection11input_rangeE">
+<span id="boost::network::http::async_connection::input_range"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a576ba8888c4152529c235a8dab8b5da4"></span><em class="property">typedef </em>iterator_range&lt;buffer_type::const_iterator&gt; <code class="descname">input_range</code><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection11input_rangeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The input range taken by <code class="docutils literal"><span class="pre">read</span></code> callbacks. Typically a range of <code class="docutils literal"><span class="pre">char</span></code>s. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv2N5boost7network4http16async_connection22read_callback_functionE">
+<span id="boost::network::http::async_connection::read_callback_function"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1abcd89ba1e7dff583ff73ce9dde0ab349"></span><em class="property">typedef </em>std::function&lt;void<span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http16async_connection11input_rangeE" title="boost::network::http::async_connection::input_range">input_range</a>, boost::system::error_code, std::size_t, <a class="reference internal" href="#_CPPv2N5boost7network4http16async_connection14connection_ptrE" title="boost::network::http::async_connection::connection_ptr">connection_ptr</a><span class="sig-paren">)</span>&gt; <code class="descname">read_callback_function</code><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection22read_callback_functionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Type required for <code class="docutils literal"><span class="pre">read</span></code> callbacks. Takes an input range, an error code, the number of bytes read, and a connection pointer. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">class</em> Range&gt;</dt>
+<dt id="_CPPv2N5boost7network4http16async_connection11set_headersE5Range">
+<span id="boost::network::http::async_connection::set_headers__Range"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a487c70a079c736b8469032ad5e1dabd2"></span>void <code class="descname">set_headers</code><span class="sig-paren">(</span>Range <em>headers</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection11set_headersE5Range" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A call to set_headers takes a Range where each element models the Header concept. This Range will be linearized onto a buffer, which is then sent as soon as the first call to <code class="docutils literal"><span class="pre">write</span></code> or <code class="docutils literal"><span class="pre">flush</span></code> commences.</p>
+<p><dl class="docutils">
+<dt><strong>Pre</strong></dt>
+<dd>Headers have not been sent yet. </dd>
+<dt><strong>Post</strong></dt>
+<dd>Headers have been linearized to a buffer, and assumed to have been sent already when the function exits. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">headers</span></code>: A range of Header objects to write out. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::logic_error</span></code>: when the precondition is violated. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection10set_statusE8status_t">
+<span id="boost::network::http::async_connection::set_status__status_t"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1abacc8b9cfa159ad40b955bb5d1e2fa16"></span>void <code class="descname">set_status</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http16async_connection8status_tE" title="boost::network::http::async_connection::status_t">status_t</a> <em>new_status</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection10set_statusE8status_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the status of the response.</p>
+<p><dl class="docutils">
+<dt><strong>Pre</strong></dt>
+<dd>Headers have not been sent. </dd>
+<dt><strong>Post</strong></dt>
+<dd>Status is set on the response. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">new_status</span></code>: The new status for this response. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">std::logic_error</span></code>: when the precondition is violated. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">class</em> Range&gt;</dt>
+<dt id="_CPPv2N5boost7network4http16async_connection5writeER5Range">
+<span id="boost::network::http::async_connection::write__RangeCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1afcee98fa25e64164a1570da0ed8447e8"></span>void <code class="descname">write</code><span class="sig-paren">(</span>Range <em class="property">const</em> &amp;<em>range</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection5writeER5Range" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Writes a given range of bytes out in order.</p>
+<p>Even though this function looks synchronous, all it does is schedules asynchronous writes to the connection as soon as the range is serialised into appropriately sized buffers.</p>
+<p>To use in your handler, it would look like:</p>
+<p>Example: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Hello, world!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">sample</span> <span class="o">=</span> <span class="s2">&quot;I have a string!&quot;</span><span class="p">;</span>
+<span class="n">connection</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span>
+</pre></div>
+</div>
+</p>
+<p>Note that if you want to send custom status and headers, you MUST call set_status and/or set_headers before any calls to write.</p>
+<p><dl class="docutils">
+<dt><strong>Post</strong></dt>
+<dd>Status and headers have been sent, contents in the range have been serialized. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">range</span></code>: A Boost.Range <code class="docutils literal"><span class="pre">Single</span> <span class="pre">Pass</span> <span class="pre">Range</span></code> of char&#8217;s for writing. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">boost::system::system_error</span></code>: The encountered underlying error in previous operations. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">class</em> Range, <em class="property">class</em> Callback&gt;</dt>
+<dt id="_CPPv2N5boost7network4http16async_connection5writeER5RangeR8Callback">
+<span id="boost::network::http::async_connection::write__RangeCR.CallbackCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a48d89e2377c27cd26a780ac8ab1a90fd"></span>disable_if&lt;is_base_of&lt;boost::asio::const_buffer, <em class="property">typename</em> Range::value_type&gt;, void&gt;::type <code class="descname">write</code><span class="sig-paren">(</span>Range <em class="property">const</em> &amp;<em>range</em>, Callback <em class="property">const</em> &amp;<em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection5writeER5RangeR8Callback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Writes a given range out and schedules a completion callback to be invoked when the writes are done. This works similarly to write above.</p>
+<p>This overload is useful for writing streaming applications that send out chunks of data at a time, or for writing data that may not all fit in memory at once.</p>
+<p><dl class="docutils">
+<dt><strong>Post</strong></dt>
+<dd>Status and headers have been sent, contents in the range have been serialized and scheduled for writing through the socket. </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">range</span></code>: A Boost.Range <code class="docutils literal"><span class="pre">Single</span> <span class="pre">Pass</span> <span class="pre">Range</span></code> of char&#8217;s for writing. </li>
+<li><code class="docutils literal"><span class="pre">callback</span></code>: A function of type <code class="docutils literal"><span class="pre">void(boost::system::error_code)</span></code>. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">boost::system::system_error</span></code>: The encountered underlying error in previous operations. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">template </em>&lt;<em class="property">class</em> ConstBufferSeq, <em class="property">class</em> Callback&gt;</dt>
+<dt id="_CPPv2N5boost7network4http16async_connection5writeER14ConstBufferSeqR8Callback">
+<span id="boost::network::http::async_connection::write__ConstBufferSeqCR.CallbackCR"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a5b7d99c888a806bca17dd7a787b2fe9b"></span>enable_if&lt;is_base_of&lt;boost::asio::const_buffer, <em class="property">typename</em> ConstBufferSeq::value_type&gt;, void&gt;::type <code class="descname">write</code><span class="sig-paren">(</span>ConstBufferSeq <em class="property">const</em> &amp;<em>seq</em>, Callback <em class="property">const</em> &amp;<em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection5writeER14ConstBufferSeqR8Callback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Writes a given set of <code class="docutils literal"><span class="pre">boost::asio::const_buffer</span></code>s out using a more efficient implementation.</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">seq</span></code>: A sequence of <code class="docutils literal"><span class="pre">boost::asio::const_buffer</span></code> objects. </li>
+<li><code class="docutils literal"><span class="pre">callback</span></code>: A function of type <code class="docutils literal"><span class="pre">void(boost::system::error_code)</span></code>. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection4readE22read_callback_function">
+<span id="boost::network::http::async_connection::read__read_callback_function"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1aa37ecedf061f0cbb25b158918b112e34"></span>void <code class="descname">read</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv2N5boost7network4http16async_connection22read_callback_functionE" title="boost::network::http::async_connection::read_callback_function">read_callback_function</a> <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection4readE22read_callback_function" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Schedules an asynchronous read from the connection. This is generally useful for handling POST/PUT or other requests that may have data coming in through the HTTP request&#8217;s body in a streaming manner.</p>
+<p>To use this function, the caller needs to provide a callback that handles a chunk of data at a time. The signature of the function (lambda or actual function pointer) should be of the following form: <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">void</span><span class="p">(</span><span class="n">input_range</span><span class="p">,</span> <span class="n">error_code</span><span class="p">,</span> <span class="n">size_t</span><span class="p">,</span> <span class="n">connection_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">callback</span></code>: Invoked when the read has data ready for processing. </li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal"><span class="pre">boost::system::system_error</span></code>: The underlying error encountered in previous operations. </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection6socketEv">
+<span id="boost::network::http::async_connection::socket"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a41131ae961524e54f450dd0b7a0a6615"></span>boost::network::stream_handler &amp;<code class="descname">socket</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection6socketEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to the underlying socket. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection11thread_poolEv">
+<span id="boost::network::http::async_connection::thread_pool"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a514951b24c7ea036d2c2125cb3f7eb03"></span>utils::thread_pool &amp;<code class="descname">thread_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection11thread_poolEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a reference to the thread_pool running this handler. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection9has_errorEv">
+<span id="boost::network::http::async_connection::has_error"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a42972c58a62eb4412f4daf8bdf482a5d"></span>bool <code class="descname">has_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection9has_errorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether or not there were errors encountered in previous operations. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N5boost7network4http16async_connection5errorEv">
+<span id="boost::network::http::async_connection::error"></span><span class="target" id="structboost_1_1network_1_1http_1_1async__connection_1a1a102f398486d1a69e1840fa2dd3e4cd"></span>optional&lt;boost::system::system_error&gt; <code class="descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N5boost7network4http16async_connection5errorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the most recent error encountered. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="adding-ssl-support-to-the-http-server">
+<h2>Adding SSL support to the HTTP Server<a class="headerlink" href="#adding-ssl-support-to-the-http-server" title="Permalink to this headline">¶</a></h2>
+<p>In order to setup SSL support for an Asynchronous Server, it is best to start from
+a regular Asynchronous Server (see above). Once this server is setup, SSL can be
+enabled by adding a <a class="reference external" href="http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference/ssl__context.html">Boost.Asio.Ssl.Context</a> to the options. The settings that can be
+used are defined in the link.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span></span><span class="c1">// Initialize SSL context</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">&gt;</span> <span class="n">ctx</span> <span class="o">=</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">&gt;</span><span class="p">(</span><span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">::</span><span class="n">sslv23</span><span class="p">);</span>
+<span class="n">ctx</span><span class="o">-&gt;</span><span class="n">set_options</span><span class="p">(</span>
+            <span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">::</span><span class="n">default_workarounds</span>
+            <span class="o">|</span> <span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">::</span><span class="n">no_sslv3</span>
+            <span class="o">|</span> <span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">::</span><span class="n">single_dh_use</span><span class="p">);</span>
+
+<span class="c1">// Set keys</span>
+<span class="n">ctx</span><span class="o">-&gt;</span><span class="n">set_password_callback</span><span class="p">(</span><span class="n">password_callback</span><span class="p">);</span>
+<span class="n">ctx</span><span class="o">-&gt;</span><span class="n">use_certificate_chain_file</span><span class="p">(</span><span class="s">&quot;server.pem&quot;</span><span class="p">);</span>
+<span class="n">ctx</span><span class="o">-&gt;</span><span class="n">use_private_key_file</span><span class="p">(</span><span class="s">&quot;server.pem&quot;</span><span class="p">,</span> <span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context</span><span class="o">::</span><span class="n">pem</span><span class="p">);</span>
+<span class="n">ctx</span><span class="o">-&gt;</span><span class="n">use_tmp_dh_file</span><span class="p">(</span><span class="s">&quot;dh512.pem&quot;</span><span class="p">);</span>
+
+<span class="n">handler_type</span> <span class="n">handler</span><span class="p">;</span>
+<span class="n">http_server</span><span class="o">::</span><span class="n">options</span> <span class="n">options</span><span class="p">(</span><span class="n">handler</span><span class="p">);</span>
+<span class="n">options</span><span class="p">.</span><span class="n">thread_pool</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">boost</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">utils</span><span class="o">::</span><span class="n">thread_pool</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+<span class="n">http_server</span> <span class="nf">server</span><span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="n">address</span><span class="p">(</span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">).</span><span class="n">port</span><span class="p">(</span><span class="s">&quot;8442&quot;</span><span class="p">).</span><span class="n">context</span><span class="p">(</span><span class="n">ctx</span><span class="p">));</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">password_callback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">max_length</span><span class="p">,</span> <span class="n">asio</span><span class="o">::</span><span class="n">ssl</span><span class="o">::</span><span class="n">context_base</span><span class="o">::</span><span class="n">password_purpose</span> <span class="n">purpose</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HTTP Server API</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#api-documentation">API Documentation</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#server-options">Server Options</a></li>
+<li><a class="reference internal" href="#public-members">Public Members</a></li>
+<li><a class="reference internal" href="#connection-object">Connection Object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-ssl-support-to-the-http-server">Adding SSL support to the HTTP Server</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="http_response.html"
+                        title="previous chapter">HTTP Response</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../references.html"
+                        title="next chapter">References</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../references.html" title="References"
+             >next</a></li>
+        <li class="right" >
+          <a href="http_response.html" title="HTTP Response"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../contents.html">cpp-netlib v0.13.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../reference.html" >Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2008-2014, Glyn Matthews, Dean Michael Berris; 2013 Google, Inc..
+      Last updated on Nov 09, 2017.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

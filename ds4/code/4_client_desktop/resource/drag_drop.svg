@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="79.180901mm"
+   height="58.858143mm"
+   viewBox="0 0 280.56225 208.55247"
+   id="svg3376"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drag_drop.svg"
+   inkscape:export-filename="C:\Users\blue\Desktop\drag_drop.png"
+   inkscape:export-xdpi="120.288"
+   inkscape:export-ydpi="120.288">
+  <defs
+     id="defs3378" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="55.382123"
+     inkscape:cy="86.15302"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="1432"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3381">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-222.57598,-10.943141)">
+    <rect
+       clip-path="none"
+       rx="7.9708347"
+       ry="5.2700477"
+       y="10.943141"
+       x="354.88626"
+       height="168.64153"
+       width="15.941669"
+       id="rect3340"
+       style="fill:#999999" />
+    <rect
+       clip-path="none"
+       transform="matrix(0,1,-1,0,0,0)"
+       style="fill:#999999"
+       id="rect3363-4"
+       width="16.688482"
+       height="161.09476"
+       x="85.162926"
+       y="-443.40448"
+       ry="5.0342112"
+       rx="8.3442411" />
+    <text
+       transform="scale(0.97736874,1.0231553)"
+       sodipodi:linespacing="125%"
+       id="text3380"
+       y="208.75365"
+       x="244.06743"
+       style="font-style:normal;font-weight:normal;font-size:24.03697395px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       inkscape:export-xdpi="120.288"
+       inkscape:export-ydpi="120.288"><tspan
+         y="208.75365"
+         x="244.06743"
+         id="tspan3382"
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans'">Drag files/folders here</tspan></text>
+  </g>
+</svg>

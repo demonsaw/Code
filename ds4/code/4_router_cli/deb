@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export ARCH=$1
+
+# Input
+if [ "$ARCH" == "" ]; then
+	ARCH=64
+fi
+
+if [ "$ARCH" == "64" ]; then
+	QMAKE=/opt/Qt/$QT_VERSION/gcc_64/bin/qmake
+fi
+
+echo $QMAKE $PWD
+$QMAKE

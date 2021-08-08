@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{724AFC7C-86C5-3C18-84A6-29655B849678}</ProjectGuid>
+    <RootNamespace>4_core-mt</RootNamespace>
+    <Keyword>QtVS_v302</Keyword>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>..\..\build\lib\msvc2017_64\release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <IntermediateDirectory>..\..\build\tmp\4_core\msvc2017_64\release\</IntermediateDirectory>
+    <PrimaryOutput>4_core-mt</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>..\..\build\lib\msvc2017_64\debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <IntermediateDirectory>..\..\build\tmp\4_core\msvc2017_64\debug\</IntermediateDirectory>
+    <PrimaryOutput>4_core-mt-gd</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
+    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>
+    </QtModules>
+  </PropertyGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>
+    </QtModules>
+  </PropertyGroup>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\build\lib\msvc2017_64\release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4_core-mt</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\build\lib\msvc2017_64\debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4_core-mt-gd</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\0_cryptopp;..\0_cpuid;..\0_msgpack\include;..\0_cppnetlib;..\0_boost;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\..\build\tmp\4_core\msvc2017_64\release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;QT_NO_DEBUG_OUTPUT;QT_NO_DEBUG;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)\4_core-mt.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;NDEBUG;QT_NO_DEBUG_OUTPUT;QT_NO_DEBUG;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\0_cryptopp;..\0_cpuid;..\0_msgpack\include;..\0_cppnetlib;..\0_boost;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\..\build\tmp\4_core\msvc2017_64\debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)\4_core-mt-gd.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;_MBCS;BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE;_CRT_SECURE_NO_WARNINGS;WINVER=0x0601;_WIN32_WINNT=0x0601;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="component\service\acceptor_service_component.cpp" />
+    <ClCompile Include="config\application.cpp" />
+    <ClCompile Include="component\io\archive_component.cpp" />
+    <ClCompile Include="component\callback\callback_service_component.cpp" />
+    <ClCompile Include="component\chat_component.cpp" />
+    <ClCompile Include="security\checksum\checksum.cpp" />
+    <ClCompile Include="data\chunk_data.cpp" />
+    <ClCompile Include="security\cipher\cipher.cpp" />
+    <ClCompile Include="component\cipher\cipher_component.cpp" />
+    <ClCompile Include="component\color_component.cpp" />
+    <ClCompile Include="component\component.cpp" />
+    <ClCompile Include="component\component_callback.cpp" />
+    <ClCompile Include="data\data_packer.cpp" />
+    <ClCompile Include="data\data_unpacker.cpp" />
+    <ClCompile Include="security\algorithm\diffie_hellman.cpp" />
+    <ClCompile Include="entity\entity.cpp" />
+    <ClCompile Include="entity\entity_callback.cpp" />
+    <ClCompile Include="entity\entity_component.cpp" />
+    <ClCompile Include="entity\entity_factory.cpp" />
+    <ClCompile Include="entity\entity_node.cpp" />
+    <ClCompile Include="command\entropy_command.cpp" />
+    <ClCompile Include="security\filter\exclusive.cpp" />
+    <ClCompile Include="component\io\file_component.cpp" />
+    <ClCompile Include="system\api.cpp" />
+    <ClCompile Include="utility\io\file_util.cpp" />
+    <ClCompile Include="component\io\folder_component.cpp" />
+    <ClCompile Include="utility\io\folder_util.cpp" />
+    <ClCompile Include="object\function.cpp" />
+    <ClCompile Include="component\group\group_component.cpp" />
+    <ClCompile Include="component\group\group_option_component.cpp" />
+    <ClCompile Include="security\hash\hash.cpp" />
+    <ClCompile Include="component\hash_component.cpp" />
+    <ClCompile Include="security\hash\hmac.cpp" />
+    <ClCompile Include="http\http_acceptor.cpp" />
+    <ClCompile Include="http\http_message.cpp" />
+    <ClCompile Include="http\http_request.cpp" />
+    <ClCompile Include="http\http_response.cpp" />
+    <ClCompile Include="http\http_service.cpp" />
+    <ClCompile Include="http\http_socket.cpp" />
+    <ClCompile Include="http\http_status.cpp" />
+    <ClCompile Include="http\http_throttle.cpp" />
+    <ClCompile Include="security\filter\lz4.cpp" />
+    <ClCompile Include="system\lz4\lz4_lib.c" />
+    <ClCompile Include="message\message.cpp" />
+    <ClCompile Include="message\message_packer.cpp" />
+    <ClCompile Include="message\message_unpacker.cpp" />
+    <ClCompile Include="component\name_component.cpp" />
+    <ClCompile Include="component\notify_component.cpp" />
+    <ClCompile Include="security\hash\pbkdf.cpp" />
+    <ClCompile Include="security\algorithm\prime.cpp" />
+    <ClCompile Include="component\security\prime_component.cpp" />
+    <ClCompile Include="security\security.cpp" />
+    <ClCompile Include="component\security\security_component.cpp" />
+    <ClCompile Include="component\service\service_component.cpp" />
+    <ClCompile Include="component\service\service_state_component.cpp" />
+    <ClCompile Include="component\session\session_component.cpp" />
+    <ClCompile Include="component\session\session_option_component.cpp" />
+    <ClCompile Include="component\service\socket_service_component.cpp" />
+    <ClCompile Include="component\state_component.cpp" />
+    <ClCompile Include="component\status\status_component.cpp" />
+    <ClCompile Include="component\service\strand_component.cpp" />
+    <ClCompile Include="thread\thread_info.cpp" />
+    <ClCompile Include="thread\thread_util.cpp" />
+    <ClCompile Include="object\time\time.cpp" />
+    <ClCompile Include="object\time\timeout.cpp" />
+    <ClCompile Include="object\time\timer.cpp" />
+    <ClCompile Include="component\ui_component.cpp" />
+    <ClCompile Include="security\filter\url.cpp" />
+    <ClCompile Include="utility\utf.cpp" />
+    <ClCompile Include="utility\value.cpp" />
+    <ClCompile Include="component\version_component.cpp" />
+    <ClCompile Include="data\version_data.cpp" />
+    <ClCompile Include="message\version_message.cpp" />
+    <ClCompile Include="security\checksum\xxhash.cpp" />
+    <ClCompile Include="system\lz4\xxhash_lib.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include=".\component\service\acceptor_service_component.h" />
+    <ClInclude Include=".\security\checksum\adler.h" />
+    <ClInclude Include=".\security\cipher\aes.h" />
+    <ClInclude Include=".\config\application.h" />
+    <ClInclude Include=".\component\io\archive_component.h" />
+    <ClInclude Include=".\system\assert.h" />
+    <ClInclude Include=".\security\filter\base.h" />
+    <ClInclude Include=".\data\request\browse_request_data.h" />
+    <ClInclude Include=".\data\response\browse_response_data.h" />
+    <ClInclude Include=".\component\callback\callback.h" />
+    <ClInclude Include=".\component\callback\callback_service_component.h" />
+    <ClInclude Include=".\component\chat_component.h" />
+    <ClInclude Include=".\data\request\chat_request_data.h" />
+    <ClInclude Include=".\security\checksum\checksum.h" />
+    <ClInclude Include=".\data\checksum_data.h" />
+    <ClInclude Include=".\exception\checksum_exception.h" />
+    <ClInclude Include=".\message\checksum_message.h" />
+    <ClInclude Include=".\data\chunk_data.h" />
+    <ClInclude Include=".\security\cipher\cipher.h" />
+    <ClInclude Include=".\component\cipher\cipher_component.h" />
+    <ClInclude Include=".\object\client.h" />
+    <ClInclude Include=".\data\client_data.h" />
+    <ClInclude Include=".\message\request\client_request_message.h" />
+    <ClInclude Include=".\message\response\client_response_message.h" />
+    <ClInclude Include=".\resource\color.h" />
+    <ClInclude Include=".\component\color_component.h" />
+    <ClInclude Include=".\component\component.h" />
+    <ClInclude Include=".\component\component_callback.h" />
+    <ClInclude Include=".\config\cpptoml.h" />
+    <ClInclude Include=".\security\checksum\crc.h" />
+    <ClInclude Include=".\data\data.h" />
+    <ClInclude Include=".\data\data_packer.h" />
+    <ClInclude Include=".\data\data_type.h" />
+    <ClInclude Include=".\data\data_unpacker.h" />
+    <ClInclude Include=".\security\algorithm\diffie_hellman.h" />
+    <ClInclude Include=".\object\download.h" />
+    <ClInclude Include=".\data\request\download_request_data.h" />
+    <ClInclude Include=".\data\response\download_response_data.h" />
+    <ClInclude Include=".\resource\emoji.h" />
+    <ClInclude Include=".\component\endpoint_component.h" />
+    <ClInclude Include=".\entity\entity.h" />
+    <ClInclude Include=".\entity\entity_callback.h" />
+    <ClInclude Include=".\entity\entity_command.h" />
+    <ClInclude Include=".\entity\entity_component.h" />
+    <ClInclude Include=".\entity\entity_factory.h" />
+    <ClInclude Include=".\entity\entity_node.h" />
+    <ClInclude Include=".\entity\entity_type.h" />
+    <ClInclude Include=".\entity\entity_util.h" />
+    <ClInclude Include=".\command\entropy_command.h" />
+    <ClInclude Include=".\component\error_component.h" />
+    <ClInclude Include=".\security\filter\exclusive.h" />
+    <ClInclude Include=".\component\io\file_component.h" />
+    <ClInclude Include=".\data\file_data.h" />
+    <ClInclude Include=".\utility\io\file_util.h" />
+    <ClInclude Include=".\security\filter\filter.h" />
+    <ClInclude Include=".\component\io\folder_component.h" />
+    <ClInclude Include=".\data\folder_data.h" />
+    <ClInclude Include=".\utility\io\folder_util.h" />
+    <ClInclude Include=".\object\function.h" />
+    <ClInclude Include=".\component\group\group_component.h" />
+    <ClInclude Include=".\component\group\group_option_component.h" />
+    <ClInclude Include=".\message\request\group_request_message.h" />
+    <ClInclude Include=".\message\response\group_response_message.h" />
+    <ClInclude Include=".\data\request\handshake_request_data.h" />
+    <ClInclude Include=".\data\response\handshake_response_data.h" />
+    <ClInclude Include=".\security\hash\hash.h" />
+    <ClInclude Include=".\component\hash_component.h" />
+    <ClInclude Include=".\data\header_data.h" />
+    <ClInclude Include=".\message\header_message.h" />
+    <ClInclude Include=".\security\filter\hex.h" />
+    <ClInclude Include=".\security\hash\hmac.h" />
+    <ClInclude Include=".\http\http.h" />
+    <ClInclude Include=".\http\http_acceptor.h" />
+    <ClInclude Include=".\http\http_code.h" />
+    <ClInclude Include=".\http\http_message.h" />
+    <ClInclude Include=".\http\http_request.h" />
+    <ClInclude Include=".\http\http_response.h" />
+    <ClInclude Include=".\http\http_service.h" />
+    <ClInclude Include=".\http\http_socket.h" />
+    <ClInclude Include=".\http\http_status.h" />
+    <ClInclude Include=".\http\http_throttle.h" />
+    <ClInclude Include=".\data\request\info_request_data.h" />
+    <ClInclude Include=".\data\response\info_response_data.h" />
+    <ClInclude Include=".\data\request\join_request_data.h" />
+    <ClInclude Include=".\data\response\join_response_data.h" />
+    <ClInclude Include=".\security\filter\lz4.h" />
+    <ClInclude Include=".\system\lz4\lz4_lib.h" />
+    <ClInclude Include=".\system\lz4\lz4hc_lib.h" />
+    <ClInclude Include=".\security\cipher\mars.h" />
+    <ClInclude Include=".\security\hash\md.h" />
+    <ClInclude Include=".\message\message.h" />
+    <ClInclude Include=".\message\message_buffer.h" />
+    <ClInclude Include=".\component\message\message_component.h" />
+    <ClInclude Include=".\message\message_packer.h" />
+    <ClInclude Include=".\message\message_type.h" />
+    <ClInclude Include=".\message\message_unpacker.h" />
+    <ClInclude Include=".\object\mode.h" />
+    <ClInclude Include=".\component\mute_component.h" />
+    <ClInclude Include=".\data\request\mute_request_data.h" />
+    <ClInclude Include=".\system\mutex.h" />
+    <ClInclude Include=".\component\name_component.h" />
+    <ClInclude Include=".\exception\not_implemented_exception.h" />
+    <ClInclude Include=".\component\notify_component.h" />
+    <ClInclude Include=".\object\object.h" />
+    <ClInclude Include=".\security\hash\pbkdf.h" />
+    <ClInclude Include=".\data\request\ping_request_data.h" />
+    <ClInclude Include=".\data\response\ping_response_data.h" />
+    <ClInclude Include=".\security\algorithm\prime.h" />
+    <ClInclude Include=".\component\security\prime_component.h" />
+    <ClInclude Include=".\system\proxy_ptr.h" />
+    <ClInclude Include=".\data\request\quit_request_data.h" />
+    <ClInclude Include=".\security\cipher\rc6.h" />
+    <ClInclude Include=".\component\room_component.h" />
+    <ClInclude Include=".\data\room_data.h" />
+    <ClInclude Include=".\data\request\room_request_data.h" />
+    <ClInclude Include=".\data\response\room_response_data.h" />
+    <ClInclude Include=".\object\router.h" />
+    <ClInclude Include=".\data\router_data.h" />
+    <ClInclude Include=".\message\request\router_request_message.h" />
+    <ClInclude Include=".\message\response\router_response_message.h" />
+    <ClInclude Include=".\security\salt.h" />
+    <ClInclude Include=".\component\search_component.h" />
+    <ClInclude Include=".\data\request\search_request_data.h" />
+    <ClInclude Include=".\data\response\search_response_data.h" />
+    <ClInclude Include=".\security\security.h" />
+    <ClInclude Include=".\component\security\security_component.h" />
+    <ClInclude Include=".\security\cipher\serpent.h" />
+    <ClInclude Include=".\component\service\service_component.h" />
+    <ClInclude Include=".\component\service\service_state_component.h" />
+    <ClInclude Include=".\component\session\session_component.h" />
+    <ClInclude Include=".\component\session\session_option_component.h" />
+    <ClInclude Include=".\security\hash\sha.h" />
+    <ClInclude Include=".\component\io\share_component.h" />
+    <ClInclude Include=".\component\socket_component.h" />
+    <ClInclude Include=".\component\service\socket_service_component.h" />
+    <ClInclude Include=".\component\spam_component.h" />
+    <ClInclude Include=".\component\state_component.h" />
+    <ClInclude Include=".\component\status\status_component.h" />
+    <ClInclude Include=".\component\service\strand_component.h" />
+    <ClInclude Include=".\thread\thread_info.h" />
+    <ClInclude Include=".\thread\thread_priority.h" />
+    <ClInclude Include=".\thread\thread_proxy.h" />
+    <ClInclude Include=".\thread\thread_safe.h" />
+    <ClInclude Include=".\thread\thread_util.h" />
+    <ClInclude Include=".\object\time\time.h" />
+    <ClInclude Include=".\component\time\time_component.h" />
+    <ClInclude Include=".\object\time\timeout.h" />
+    <ClInclude Include=".\component\time\timeout_component.h" />
+    <ClInclude Include=".\object\time\timer.h" />
+    <ClInclude Include=".\component\time\timer_component.h" />
+    <ClInclude Include=".\config\toml.h" />
+    <ClInclude Include=".\object\transfer.h" />
+    <ClInclude Include=".\data\request\transfer_request_data.h" />
+    <ClInclude Include=".\data\response\transfer_response_data.h" />
+    <ClInclude Include=".\data\request\tunnel_request_data.h" />
+    <ClInclude Include=".\security\cipher\twofish.h" />
+    <ClInclude Include=".\system\type.h" />
+    <ClInclude Include=".\component\ui_component.h" />
+    <ClInclude Include=".\object\upload.h" />
+    <ClInclude Include=".\data\request\upload_request_data.h" />
+    <ClInclude Include=".\data\response\upload_response_data.h" />
+    <ClInclude Include=".\security\filter\url.h" />
+    <ClInclude Include=".\utility\utf.h" />
+    <ClInclude Include=".\utility\value.h" />
+    <ClInclude Include=".\exception\value_exception.h" />
+    <ClInclude Include=".\component\verified_component.h" />
+    <ClInclude Include=".\component\version_component.h" />
+    <ClInclude Include=".\data\version_data.h" />
+    <ClInclude Include=".\exception\version_exception.h" />
+    <ClInclude Include=".\message\version_message.h" />
+    <ClInclude Include=".\resource\word.h" />
+    <ClInclude Include=".\security\checksum\xxhash.h" />
+    <ClInclude Include=".\system\lz4\xxhash_lib.h" />
+    <ClInclude Include="system\api.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

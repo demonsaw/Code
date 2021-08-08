@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>0_msgpack</ProjectName>
+    <ProjectGuid>{122A2EA4-B283-4241-9655-786DE78283B2}</ProjectGuid>
+    <RootNamespace>MessagePack</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <IntermediateOutputPath>$(SolutionDir)_tmp\$(ProjectName)\$(Platform)</IntermediateOutputPath>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.24720.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)_lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)_tmp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)_lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)_tmp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>StackFrameRuntimeCheck</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4191; 4242; 4996</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+    <PreBuildEvent>
+      <Command>rmdir $(ProjectDir)debug $(ProjectDir)release</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4191; 4242; 4996</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\objectc.c" />
+    <ClCompile Include="src\unpack.c" />
+    <ClCompile Include="src\version.c" />
+    <ClCompile Include="src\vrefbuffer.c" />
+    <ClCompile Include="src\zone.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\msgpack.h" />
+    <ClInclude Include="include\msgpack.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\adaptor_base.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\array_ref.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\bool.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\boost\fusion.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\boost\msgpack_variant.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\boost\optional.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\boost\string_ref.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\char_ptr.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\check_container_size.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\array.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\array_char.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\array_unsigned_char.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\forward_list.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\reference_wrapper.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\shared_ptr.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\tuple.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\unique_ptr.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\unordered_map.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\cpp11\unordered_set.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\define.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\deque.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp03_define_array.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp03_define_map.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp03_msgpack_tuple.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp11_define_array.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp11_define_map.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\detail\cpp11_msgpack_tuple.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\ext.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\fixint.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\float.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\int.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\list.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\map.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\msgpack_tuple.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\nil.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\pair.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\raw.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\set.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\string.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\tr1\unordered_map.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\tr1\unordered_set.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\v4raw.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\vector.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\vector_bool.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\vector_char.hpp" />
+    <ClInclude Include="include\msgpack\adaptor\vector_unsigned_char.hpp" />
+    <ClInclude Include="include\msgpack\cpp_config.hpp" />
+    <ClInclude Include="include\msgpack\detail\cpp03_zone.hpp" />
+    <ClInclude Include="include\msgpack\detail\cpp11_zone.hpp" />
+    <ClInclude Include="include\msgpack\fbuffer.h" />
+    <ClInclude Include="include\msgpack\fbuffer.hpp" />
+    <ClInclude Include="include\msgpack\gcc_atomic.h" />
+    <ClInclude Include="include\msgpack\iterator.hpp" />
+    <ClInclude Include="include\msgpack\meta.hpp" />
+    <ClInclude Include="include\msgpack\object.h" />
+    <ClInclude Include="include\msgpack\object.hpp" />
+    <ClInclude Include="include\msgpack\object_fwd.hpp" />
+    <ClInclude Include="include\msgpack\pack.h" />
+    <ClInclude Include="include\msgpack\pack.hpp" />
+    <ClInclude Include="include\msgpack\pack_define.h" />
+    <ClInclude Include="include\msgpack\pack_template.h" />
+    <ClInclude Include="include\msgpack\predef.h" />
+    <ClInclude Include="include\msgpack\predef\architecture.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\alpha.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\arm.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\blackfin.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\convex.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\ia64.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\m68k.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\mips.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\parisc.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\ppc.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\pyramid.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\rs6k.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\sparc.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\superh.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\sys370.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\sys390.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\x86.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\x86\32.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\x86\64.h" />
+    <ClInclude Include="include\msgpack\predef\architecture\z.h" />
+    <ClInclude Include="include\msgpack\predef\compiler.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\borland.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\clang.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\comeau.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\compaq.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\diab.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\digitalmars.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\dignus.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\edg.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\ekopath.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\gcc.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\gcc_xml.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\greenhills.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\hp_acc.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\iar.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\ibm.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\intel.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\kai.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\llvm.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\metaware.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\metrowerks.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\microtec.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\mpw.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\palm.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\pgi.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\sgi_mipspro.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\sunpro.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\tendra.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\visualc.h" />
+    <ClInclude Include="include\msgpack\predef\compiler\watcom.h" />
+    <ClInclude Include="include\msgpack\predef\detail\comp_detected.h" />
+    <ClInclude Include="include\msgpack\predef\detail\endian_compat.h" />
+    <ClInclude Include="include\msgpack\predef\detail\os_detected.h" />
+    <ClInclude Include="include\msgpack\predef\detail\platform_detected.h" />
+    <ClInclude Include="include\msgpack\predef\detail\test.h" />
+    <ClInclude Include="include\msgpack\predef\detail\_cassert.h" />
+    <ClInclude Include="include\msgpack\predef\detail\_exception.h" />
+    <ClInclude Include="include\msgpack\predef\language.h" />
+    <ClInclude Include="include\msgpack\predef\language\objc.h" />
+    <ClInclude Include="include\msgpack\predef\language\stdc.h" />
+    <ClInclude Include="include\msgpack\predef\language\stdcpp.h" />
+    <ClInclude Include="include\msgpack\predef\library.h" />
+    <ClInclude Include="include\msgpack\predef\library\c.h" />
+    <ClInclude Include="include\msgpack\predef\library\c\gnu.h" />
+    <ClInclude Include="include\msgpack\predef\library\c\uc.h" />
+    <ClInclude Include="include\msgpack\predef\library\c\vms.h" />
+    <ClInclude Include="include\msgpack\predef\library\c\zos.h" />
+    <ClInclude Include="include\msgpack\predef\library\c\_prefix.h" />
+    <ClInclude Include="include\msgpack\predef\library\std.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\cxx.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\dinkumware.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\libcomo.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\modena.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\msl.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\roguewave.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\sgi.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\stdcpp3.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\stlport.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\vacpp.h" />
+    <ClInclude Include="include\msgpack\predef\library\std\_prefix.h" />
+    <ClInclude Include="include\msgpack\predef\make.h" />
+    <ClInclude Include="include\msgpack\predef\os.h" />
+    <ClInclude Include="include\msgpack\predef\os\aix.h" />
+    <ClInclude Include="include\msgpack\predef\os\amigaos.h" />
+    <ClInclude Include="include\msgpack\predef\os\android.h" />
+    <ClInclude Include="include\msgpack\predef\os\beos.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd\bsdi.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd\dragonfly.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd\free.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd\net.h" />
+    <ClInclude Include="include\msgpack\predef\os\bsd\open.h" />
+    <ClInclude Include="include\msgpack\predef\os\cygwin.h" />
+    <ClInclude Include="include\msgpack\predef\os\haiku.h" />
+    <ClInclude Include="include\msgpack\predef\os\hpux.h" />
+    <ClInclude Include="include\msgpack\predef\os\ios.h" />
+    <ClInclude Include="include\msgpack\predef\os\irix.h" />
+    <ClInclude Include="include\msgpack\predef\os\linux.h" />
+    <ClInclude Include="include\msgpack\predef\os\macos.h" />
+    <ClInclude Include="include\msgpack\predef\os\os400.h" />
+    <ClInclude Include="include\msgpack\predef\os\qnxnto.h" />
+    <ClInclude Include="include\msgpack\predef\os\solaris.h" />
+    <ClInclude Include="include\msgpack\predef\os\unix.h" />
+    <ClInclude Include="include\msgpack\predef\os\vms.h" />
+    <ClInclude Include="include\msgpack\predef\os\windows.h" />
+    <ClInclude Include="include\msgpack\predef\other.h" />
+    <ClInclude Include="include\msgpack\predef\other\endian.h" />
+    <ClInclude Include="include\msgpack\predef\platform.h" />
+    <ClInclude Include="include\msgpack\predef\platform\mingw.h" />
+    <ClInclude Include="include\msgpack\predef\platform\windows_desktop.h" />
+    <ClInclude Include="include\msgpack\predef\platform\windows_phone.h" />
+    <ClInclude Include="include\msgpack\predef\platform\windows_runtime.h" />
+    <ClInclude Include="include\msgpack\predef\platform\windows_store.h" />
+    <ClInclude Include="include\msgpack\predef\version.h" />
+    <ClInclude Include="include\msgpack\predef\version_number.h" />
+    <ClInclude Include="include\msgpack\preprocessor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\add.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\dec.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\detail\div_base.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\div.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\inc.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\mod.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\mul.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\arithmetic\sub.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\data.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\detail\get_data.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\elem.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\insert.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\pop_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\pop_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\push_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\push_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\remove.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\replace.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\reverse.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\size.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\to_list.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\to_seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\array\to_tuple.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\assert_msg.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\cat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comma.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comma_if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\equal.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\greater.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\greater_equal.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\less.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\less_equal.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\comparison\not_equal.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\config\config.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\config\limits.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\deduce_d.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\detail\dmc\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\detail\edg\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\detail\msvc\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\detail\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\expr_if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\expr_iif.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\iif.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\control\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\debug.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\debug\assert.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\debug\error.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\debug\line.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\dec.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\auto_rec.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\check.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\dmc\auto_rec.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\is_binary.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\is_nullary.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\is_unary.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\null.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\detail\split.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\empty.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum_params_with_a_default.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum_params_with_defaults.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum_shifted.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\enum_shifted_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\expand.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\expr_if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\apply.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\detail\is_empty.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\empty.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\expand.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\identity.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\intercept.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\is_1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\is_empty.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\is_empty_or_1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\is_empty_variadic.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\facilities\overload.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\identity.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\inc.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iterate.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\lower1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\lower2.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\lower3.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\lower4.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\lower5.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\upper1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\upper2.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\upper3.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\upper4.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\bounds\upper5.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\finish.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\forward1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\forward2.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\forward3.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\forward4.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\forward5.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\reverse1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\reverse2.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\reverse3.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\reverse4.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\iter\reverse5.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\local.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\rlocal.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\self.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\detail\start.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\iterate.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\local.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\iteration\self.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\library.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\limits.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\adt.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\append.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\at.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\cat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\detail\dmc\fold_left.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\detail\edg\fold_left.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\detail\edg\fold_right.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\detail\fold_left.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\detail\fold_right.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\filter.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\first_n.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\fold_left.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\fold_right.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\for_each.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\for_each_i.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\for_each_product.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\rest_n.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\reverse.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\size.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\to_array.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\to_seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\to_tuple.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\list\transform.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\and.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\bitand.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\bitnor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\bitor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\bitxor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\bool.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\compl.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\nor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\not.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\or.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\logical\xor.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\max.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\min.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\comma.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\comma_if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\detail\is_begin_parens.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\is_begin_parens.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\paren.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\paren_if.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\punctuation\remove_parens.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat_2nd.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat_3rd.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat_from_to.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat_from_to_2nd.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repeat_from_to_3rd.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\deduce_r.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\deduce_z.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\detail\dmc\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\detail\edg\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\detail\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\detail\msvc\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_binary_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_params_with_a_default.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_params_with_defaults.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_shifted.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_shifted_binary_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_shifted_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_trailing.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_trailing_binary_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\enum_trailing_params.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\for.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\repeat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\repetition\repeat_from_to.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\selection.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\selection\max.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\selection\min.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\cat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\detail\binary_transform.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\detail\split.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\elem.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\filter.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\first_n.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\fold_left.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\fold_right.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\for_each.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\for_each_i.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\for_each_product.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\insert.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\pop_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\pop_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\push_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\push_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\remove.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\replace.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\rest_n.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\reverse.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\size.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\subseq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\to_array.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\to_list.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\to_tuple.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\transform.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\seq\variadic_seq_to_seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\counter.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\counter.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\def.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\shared.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\slot1.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\slot2.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\slot3.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\slot4.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\detail\slot5.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\slot\slot.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\stringize.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\detail\is_single_return.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\eat.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\elem.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\enum.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\insert.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\pop_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\pop_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\push_back.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\push_front.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\rem.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\remove.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\replace.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\reverse.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\size.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\to_array.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\to_list.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\tuple\to_seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\detail\is_single_return.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\elem.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\size.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\to_array.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\to_list.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\to_seq.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\variadic\to_tuple.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\while.hpp" />
+    <ClInclude Include="include\msgpack\preprocessor\wstringize.hpp" />
+    <ClInclude Include="include\msgpack\sbuffer.h" />
+    <ClInclude Include="include\msgpack\sbuffer.hpp" />
+    <ClInclude Include="include\msgpack\sysdep.h" />
+    <ClInclude Include="include\msgpack\type.hpp" />
+    <ClInclude Include="include\msgpack\unpack.h" />
+    <ClInclude Include="include\msgpack\unpack.hpp" />
+    <ClInclude Include="include\msgpack\unpack_define.h" />
+    <ClInclude Include="include\msgpack\unpack_template.h" />
+    <ClInclude Include="include\msgpack\util.h" />
+    <ClInclude Include="include\msgpack\version.h" />
+    <ClInclude Include="include\msgpack\version.hpp" />
+    <ClInclude Include="include\msgpack\versioning.hpp" />
+    <ClInclude Include="include\msgpack\version_master.h" />
+    <ClInclude Include="include\msgpack\vrefbuffer.h" />
+    <ClInclude Include="include\msgpack\vrefbuffer.hpp" />
+    <ClInclude Include="include\msgpack\zbuffer.h" />
+    <ClInclude Include="include\msgpack\zbuffer.hpp" />
+    <ClInclude Include="include\msgpack\zone.h" />
+    <ClInclude Include="include\msgpack\zone.hpp" />
+    <ClInclude Include="src\gcc_atomic.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
