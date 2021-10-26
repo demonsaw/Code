@@ -1,0 +1,56 @@
+#!/bin/bash
+ 
+export TEMP=$0
+export CMD=$(echo $TEMP| cut -d'_' -f 2)
+export ARCH=32
+export DISTRO=arm
+export QMAKE=/usr/bin/qmake
+
+# Start
+echo $QMAKE $PWD
+$QMAKE 4_config.pro
+echo
+
+# 3rd Party
+cd 0_cppnetlib
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+cd 0_cryptopp
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+cd 0_libcpuid
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+cd 0_msgpack
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+# Library
+cd 4_core
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+cd 4_cli
+echo $CMD $ARCH
+source $CMD $ARCH
+echo
+cd ..
+
+
+#echo $CMD $1
+#source $CMD $1
+#echo
+#cd ..
